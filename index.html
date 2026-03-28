@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IBBA Financial Daily News</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #EC7000;
+    --orange-glow: rgba(236,112,0,0.15);
+    --orange-hover: #FF8C1A;
+    --bg: #08090C;
+    --surface: #111318;
+    --surface-2: #181B22;
+    --surface-hover: #1E2129;
+    --border: rgba(255,255,255,0.06);
+    --border-strong: rgba(255,255,255,0.1);
+    --text: #EAEDF2;
+    --text-2: #8B92A0;
+    --text-3: #555B69;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--text-3); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-2); }
+
+  /* ==================== HEADER ==================== */
+  .header {
+    position: relative;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--orange), var(--orange-hover), var(--orange));
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 0; }
+    50% { background-position: 100% 0; }
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 48px;
+    width: 200px; height: 100%;
+    background: radial-gradient(ellipse at top left, var(--orange-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-left { display: flex; align-items: center; gap: 14px; z-index: 1; }
+  .logo {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--orange) 0%, #D35F00 100%);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 13px; color: white;
+    letter-spacing: -0.5px;
+    box-shadow: 0 2px 12px rgba(236,112,0,0.3);
+  }
+  .header-text h1 {
+    font-size: 16px; font-weight: 700; color: white;
+    letter-spacing: -0.3px;
+  }
+  .header-text .subtitle {
+    font-size: 11.5px; color: var(--text-2); margin-top: 1px;
+    font-weight: 500;
+  }
+
+  .header-actions { display: flex; gap: 8px; z-index: 1; }
+
+  /* ==================== BUTTONS ==================== */
+  .btn {
+    height: 36px; padding: 0 16px; border: none; border-radius: 8px;
+    font-family: inherit; font-size: 12.5px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 6px;
+    letter-spacing: -0.1px;
+  }
+  .btn-orange {
+    background: linear-gradient(135deg, var(--orange) 0%, #D35F00 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(236,112,0,0.25);
+  }
+  .btn-orange:hover {
+    box-shadow: 0 4px 16px rgba(236,112,0,0.4);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    background: rgba(255,255,255,0.04);
+    color: var(--text-2);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+  .btn-dark {
+    background: var(--surface-2); color: var(--text-2);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-dark:hover { background: var(--surface-hover); color: var(--text); }
+
+  /* ==================== CONTAINER ==================== */
+  .container { max-width: 1320px; margin: 0 auto; padding: 28px 48px 48px; }
+
+  /* ==================== STATS ==================== */
+  .stats { display: flex; gap: 12px; margin-bottom: 28px; }
+  .stat {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease-out both;
+  }
+  .stat:nth-child(1) { animation-delay: 0.05s; }
+  .stat:nth-child(2) { animation-delay: 0.1s; }
+  .stat:nth-child(3) { animation-delay: 0.15s; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .stat::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    border-radius: 0 2px 2px 0;
+  }
+  .stat:nth-child(1)::before { background: var(--orange); }
+  .stat:nth-child(2)::before { background: #64B5F6; }
+  .stat:nth-child(3)::before { background: var(--text-3); }
+  .stat .label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-3); margin-bottom: 6px; font-weight: 600;
+  }
+  .stat .num { font-size: 36px; font-weight: 800; letter-spacing: -2px; line-height: 1; }
+  .stat .num.c1 { color: var(--orange); }
+  .stat .num.c2 { color: #64B5F6; }
+  .stat .num.c3 { color: var(--text-3); }
+
+  /* ==================== TABS ==================== */
+  .tabs {
+    display: flex; gap: 4px; margin-bottom: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+    width: fit-content;
+  }
+  .tab-btn {
+    padding: 8px 20px; font-family: inherit;
+    font-size: 13px; font-weight: 500;
+    color: var(--text-2); cursor: pointer;
+    border: none; background: none;
+    border-radius: 7px;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    background: var(--surface-hover);
+    color: var(--text); font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  /* ==================== VIEWS ==================== */
+  .view { display: none; }
+  .view.active { display: block; animation: fadeUp 0.3s ease-out; }
+
+  /* ==================== COLUMNS ==================== */
+  .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+  /* ==================== SECTION ==================== */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    animation: fadeUp 0.4s ease-out both;
+  }
+  .columns .section:nth-child(1) { animation-delay: 0.1s; }
+  .columns .section:nth-child(2) { animation-delay: 0.15s; }
+
+  .sec-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .sec-head h2 {
+    font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    display: inline-block;
+  }
+  .dot.br { background: var(--orange); box-shadow: 0 0 6px var(--orange-glow); }
+  .dot.gl { background: #64B5F6; box-shadow: 0 0 6px rgba(100,181,246,0.3); }
+  .dot.bn { background: var(--text-3); }
+  .badge {
+    font-size: 11px; color: var(--text-3); font-weight: 500;
+    background: rgba(255,255,255,0.04);
+    padding: 3px 10px; border-radius: 6px;
+  }
+
+  /* ==================== NEWS ITEMS ==================== */
+  .news-list { padding: 6px; }
+
+  .news-item {
+    padding: 10px 14px; border-radius: 8px;
+    display: flex; align-items: flex-start; gap: 10px;
+    transition: all 0.15s;
+    position: relative;
+    border: 1px solid transparent;
+  }
+  .news-item:hover {
+    background: var(--surface-hover);
+    border-color: var(--border);
+  }
+
+  .chk {
+    width: 16px; height: 16px; border-radius: 4px;
+    border: 1.5px solid var(--text-3); cursor: pointer;
+    flex-shrink: 0; margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .chk.on {
+    background: var(--orange); border-color: var(--orange);
+    box-shadow: 0 0 8px var(--orange-glow);
+  }
+  .chk.on::after {
+    content: '';
+    width: 6px; height: 3px;
+    border-left: 1.5px solid white;
+    border-bottom: 1.5px solid white;
+    transform: rotate(-45deg);
+    margin-top: -1px;
+  }
+
+  .n-body { flex: 1; min-width: 0; }
+  .n-title {
+    font-size: 13px; font-weight: 500; line-height: 1.5;
+    color: var(--text); margin-bottom: 2px;
+  }
+  .n-meta {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 3px;
+  }
+  .n-src {
+    font-size: 10.5px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text-3);
+    background: rgba(255,255,255,0.04);
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .n-url {
+    font-size: 11px; color: var(--text-3);
+    text-decoration: none; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+    max-width: 250px; display: inline-block;
+  }
+  .n-url:hover { color: var(--orange); }
+
+  /* Sentiment chips */
+  .n-sent {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; padding: 2px 7px; border-radius: 4px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .n-sent.pos { color: #66BB6A; background: rgba(102,187,106,0.1); }
+  .n-sent.neg { color: #EF5350; background: rgba(239,83,80,0.1); }
+  .n-sent.neu { color: var(--text-3); background: rgba(255,255,255,0.04); }
+
+  /* Impact line */
+  .n-impact {
+    font-size: 11.5px; color: var(--text-2); margin-top: 4px;
+    line-height: 1.5; font-style: italic;
+  }
+
+  /* Ticker tags */
+  .n-tickers { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+  .n-ticker {
+    font-size: 9.5px; font-weight: 700; color: var(--orange);
+    background: rgba(236,112,0,0.08);
+    padding: 1px 6px; border-radius: 3px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-bottom: 20px;
+    animation: fadeUp 0.4s ease-out both;
+    animation-delay: 0.18s;
+  }
+  .filter-chip {
+    font-family: inherit; font-size: 11px; font-weight: 600;
+    padding: 5px 12px; border-radius: 6px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text-2); cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-chip:hover { background: var(--surface-hover); color: var(--text); }
+  .filter-chip.active {
+    background: rgba(236,112,0,0.12);
+    border-color: rgba(236,112,0,0.3);
+    color: var(--orange);
+  }
+  .filter-chip.all { color: var(--text-3); font-weight: 500; }
+  .filter-chip.all.active { background: var(--surface-hover); color: var(--text); border-color: var(--border-strong); }
+
+  .n-date {
+    font-size: 10px; font-weight: 600; color: var(--text-3);
+    background: rgba(255,255,255,0.04);
+    padding: 2px 6px; border-radius: 4px;
+    white-space: nowrap;
+  }
+  .n-date.today { color: #66BB6A; background: rgba(102,187,106,0.08); }
+  .n-date.old { color: #EF5350; background: rgba(239,83,80,0.08); }
+  .n-warn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 4px;
+    background: rgba(255,183,77,0.1);
+    color: #FFB74D; font-size: 11px; font-weight: 700;
+    cursor: default; flex-shrink: 0;
+    position: relative;
+  }
+  .n-warn:hover::after {
+    content: 'Data nao confirmada';
+    position: absolute; bottom: 100%; left: 50%;
+    transform: translateX(-50%); margin-bottom: 4px;
+    background: var(--surface-2); color: var(--text);
+    font-size: 10px; font-weight: 500;
+    padding: 4px 8px; border-radius: 5px;
+    white-space: nowrap;
+    border: 1px solid var(--border-strong);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 10;
+  }
+
+  /* Expand summary button */
+  .n-expand-btn {
+    width: 24px; height: 24px; border-radius: 6px;
+    border: 1px solid var(--border-strong);
+    background: rgba(255,255,255,0.03);
+    cursor: pointer; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; color: var(--text-3);
+    font-size: 12px; margin-top: 1px;
+  }
+  .n-expand-btn:hover { background: rgba(236,112,0,0.08); color: var(--orange); border-color: rgba(236,112,0,0.3); }
+  .n-expand-btn.open { background: rgba(236,112,0,0.1); color: var(--orange); border-color: rgba(236,112,0,0.25); transform: rotate(180deg); }
+
+  /* Summary panel */
+  .n-summary {
+    display: none;
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text-2);
+    animation: summaryIn 0.2s ease-out;
+  }
+  .n-summary.open { display: block; }
+  @keyframes summaryIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .item-acts { display: flex; gap: 3px; opacity: 0; transition: opacity 0.15s; }
+  .news-item:hover .item-acts { opacity: 1; }
+
+  .act {
+    width: 28px; height: 28px; border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; color: var(--text-3);
+    font-size: 12px;
+  }
+  .act:hover { background: var(--surface-hover); color: var(--text); }
+  .act.up:hover { color: var(--orange); border-color: rgba(236,112,0,0.3); background: rgba(236,112,0,0.08); }
+  .act.dn:hover { color: #EF5350; border-color: rgba(239,83,80,0.3); background: rgba(239,83,80,0.08); }
+
+  /* ==================== PREVIEW ==================== */
+  .preview-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .preview-head {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .preview-head h3 { font-size: 14px; font-weight: 600; }
+  .preview-body {
+    padding: 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .preview-text {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px; line-height: 1.8;
+    white-space: pre-wrap;
+    color: var(--text-2);
+  }
+  .preview-foot {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex; gap: 8px;
+  }
+
+  /* ==================== TOAST ==================== */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--orange);
+    color: white;
+    padding: 10px 24px; border-radius: 10px;
+    font-size: 13px; font-weight: 600;
+    opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none; z-index: 100;
+    box-shadow: 0 8px 32px rgba(236,112,0,0.3);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ==================== EMPTY / LOADING ==================== */
+  .empty { text-align: center; padding: 32px; color: var(--text-3); font-size: 13px; }
+  .loading { text-align: center; padding: 80px; color: var(--text-3); }
+  .spinner {
+    display: inline-block; width: 28px; height: 28px;
+    border: 2.5px solid var(--border-strong);
+    border-top-color: var(--orange);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-bottom: 14px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ==================== BENCH SECTION ==================== */
+  .bench-section { animation-delay: 0.25s; }
+  .bench-section .sec-head { background: rgba(255,255,255,0.01); }
+
+  /* ==================== STATS VIEW ==================== */
+  .stats-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;
+  }
+  .stats-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    animation: fadeUp 0.4s ease-out both;
+  }
+  .stats-panel:nth-child(1) { animation-delay: 0.05s; }
+  .stats-panel:nth-child(2) { animation-delay: 0.1s; }
+  .stats-panel.full-width {
+    grid-column: 1 / -1;
+    animation-delay: 0.15s;
+  }
+  .stats-panel-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .stats-panel-head h3 {
+    font-size: 13px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .stats-panel-body { padding: 16px 20px; }
+
+  /* Horizontal bar chart */
+  .hbar-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 6px 0;
+  }
+  .hbar-label {
+    width: 110px; flex-shrink: 0;
+    font-size: 12px; font-weight: 600; color: var(--text);
+    text-align: right; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .hbar-track {
+    flex: 1; height: 26px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    overflow: hidden; position: relative;
+  }
+  .hbar-fill {
+    height: 100%; border-radius: 6px;
+    min-width: 4px;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex; align-items: center; justify-content: flex-end;
+    padding-right: 8px;
+  }
+  .hbar-val {
+    font-size: 10px; font-weight: 700; color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  .hbar-val-out {
+    font-size: 11px; font-weight: 600; color: var(--text-3);
+    width: 32px; text-align: left; flex-shrink: 0;
+  }
+
+  /* Summary cards inside stats */
+  .summary-cards { display: flex; gap: 10px; flex-wrap: wrap; }
+  .summary-card {
+    flex: 1; min-width: 100px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px; text-align: center;
+  }
+  .summary-card .sc-val {
+    font-size: 28px; font-weight: 800; letter-spacing: -1.5px;
+    line-height: 1;
+  }
+  .summary-card .sc-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--text-3); margin-top: 6px; font-weight: 600;
+  }
+
+  /* 7-day chart in stats */
+  .stats-chart-bars {
+    display: flex; align-items: flex-end; gap: 8px; height: 80px;
+    padding-top: 8px;
+  }
+  .stats-chart-col { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+  .stats-bar-wrap {
+    width: 100%; height: 80px;
+    display: flex; align-items: flex-end; justify-content: center; gap: 3px;
+  }
+  .stats-bar {
+    flex: 1; max-width: 20px; border-radius: 4px 4px 0 0;
+    min-height: 3px; transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+  }
+  .stats-bar.br { background: linear-gradient(180deg, var(--orange-hover), var(--orange)); }
+  .stats-bar.gl { background: linear-gradient(180deg, #90CAF9, #64B5F6); }
+  .stats-bar-tip {
+    position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+    font-size: 9px; font-weight: 700; color: var(--text-2);
+  }
+  .stats-chart-day {
+    font-size: 10px; color: var(--text-3); font-weight: 600;
+  }
+  .stats-chart-empty {
+    height: 80px; display: flex; align-items: center; justify-content: center;
+    color: var(--text-3); font-size: 12px;
+  }
+
+  /* Legend */
+  .chart-legend {
+    display: flex; gap: 16px; margin-top: 12px; justify-content: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-2); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 3px; }
+  .legend-dot.br { background: var(--orange); }
+  .legend-dot.gl { background: #64B5F6; }
+
+  /* ==================== STALE BANNER ==================== */
+  .stale-banner {
+    display: none;
+    background: linear-gradient(135deg, #1a1205 0%, #1e1408 100%);
+    border: 1px solid rgba(236,112,0,0.25);
+    border-radius: var(--radius);
+    padding: 16px 24px;
+    margin-bottom: 20px;
+    align-items: center;
+    gap: 14px;
+    animation: fadeUp 0.4s ease-out both;
+  }
+  .stale-banner.show { display: flex; }
+  .stale-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: rgba(236,112,0,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 18px;
+  }
+  .stale-body { flex: 1; }
+  .stale-title {
+    font-size: 13px; font-weight: 600; color: var(--orange);
+    margin-bottom: 3px;
+  }
+  .stale-desc { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+  .stale-desc kbd {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo">iBBA</div>
+    <div class="header-text">
+      <h1>Financial Daily News</h1>
+      <div class="subtitle" id="dateDisplay">Carregando...</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-ghost" onclick="resetAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+      Resetar
+    </button>
+    <button class="btn btn-orange" onclick="switchView('preview')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+      Copiar para WhatsApp
+    </button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="stale-banner" id="staleBanner">
+    <div class="stale-icon">&#9888;</div>
+    <div class="stale-body">
+      <div class="stale-title" id="staleTitle">Dados desatualizados</div>
+      <div class="stale-desc" id="staleDesc">Os dados carregados nao sao de hoje. Peça uma atualização no Cowork e depois pressione <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> para recarregar.</div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat">
+      <div class="label">Brasil</div>
+      <div class="num c1" id="countBR">0</div>
+    </div>
+    <div class="stat">
+      <div class="label">Global</div>
+      <div class="num c2" id="countGL">0</div>
+    </div>
+    <div class="stat">
+      <div class="label">Reserva</div>
+      <div class="num c3" id="countBench">0</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchView('edit')">Curadoria</button>
+    <button class="tab-btn" onclick="switchView('preview')">Preview</button>
+    <button class="tab-btn" onclick="switchView('stats')">Estatisticas</button>
+  </div>
+
+  <div class="view active" id="editView">
+    <div id="loadingState" class="loading">
+      <div class="spinner"></div>
+      <div>Carregando dados...</div>
+    </div>
+    <div id="contentState" style="display:none;">
+      <div class="filter-bar" id="filterBar"></div>
+      <div class="columns">
+        <div class="section">
+          <div class="sec-head">
+            <h2><span class="dot br"></span> Brasil</h2>
+            <span class="badge" id="badgeBR">0</span>
+          </div>
+          <div class="news-list" id="listBR"></div>
+        </div>
+        <div class="section">
+          <div class="sec-head">
+            <h2><span class="dot gl"></span> Global</h2>
+            <span class="badge" id="badgeGL">0</span>
+          </div>
+          <div class="news-list" id="listGL"></div>
+        </div>
+      </div>
+      <div class="section bench-section">
+        <div class="sec-head">
+          <h2><span class="dot bn"></span> Classe B &mdash; Reserva</h2>
+          <span class="badge" id="badgeBN">0</span>
+        </div>
+        <div class="news-list" id="listBN"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="view" id="previewView">
+    <div class="preview-panel">
+      <div class="preview-head">
+        <h3>Pronto para WhatsApp</h3>
+        <span class="badge" id="previewCount"></span>
+      </div>
+      <div class="preview-body">
+        <div class="preview-text" id="previewBox"></div>
+      </div>
+      <div class="preview-foot">
+        <button class="btn btn-orange" onclick="copyToClipboard()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copiar
+        </button>
+        <button class="btn btn-dark" onclick="switchView('edit')">Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="view" id="statsView">
+    <div class="stats-grid">
+      <div class="stats-panel">
+        <div class="stats-panel-head">
+          <h3>Resumo Geral</h3>
+          <span class="badge" id="statsHistDays"></span>
+        </div>
+        <div class="stats-panel-body">
+          <div class="summary-cards" id="summaryCards"></div>
+        </div>
+      </div>
+      <div class="stats-panel">
+        <div class="stats-panel-head">
+          <h3>Ultimos 7 Dias</h3>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-dot br"></div>Brasil</div>
+            <div class="legend-item"><div class="legend-dot gl"></div>Global</div>
+          </div>
+        </div>
+        <div class="stats-panel-body">
+          <div id="statsChartArea"></div>
+        </div>
+      </div>
+      <div class="stats-panel full-width">
+        <div class="stats-panel-head">
+          <h3>Mencoes por Empresa / Tema</h3>
+          <span class="badge" id="statsKwBadge">acumulado</span>
+        </div>
+        <div class="stats-panel-body" id="keywordBarsArea"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var NEWS_DATA = null;
+var state = { brazil: [], global: [], bench: [] };
+
+var EMBEDDED_DATA = {
+  "date": "2026-03-28",
+  "classA_brazil": [
+    { "headline": "BC decreta liquidação extrajudicial do Banco Master Múltiplo após fim do prazo do Raet", "url": "https://www.campograndenews.com.br/economia/banco-central-decreta-liquidacao-extrajudicial-do-master-multiplo", "source": "Campo Grande News", "pub_date": "2026-03-28", "sentiment": "negative", "impact": "Risco sistêmico limitado, mas FGC pode ser acionado — monitore exposição de bancos médios", "tickers": ["Master"], "summary": "O Banco Central decretou a liquidação extrajudicial do Banco Master Múltiplo após o encerramento do prazo do Regime de Administração Especial Temporária (Raet). A medida vem após meses de tentativas de reestruturação que não alcançaram os indicadores mínimos de solvência exigidos pelo regulador. O FGC será acionado para cobrir depósitos de até R$ 250 mil por CPF, e o mercado monitora potenciais efeitos de contágio sobre bancos médios com perfil de funding semelhante." },
+    { "headline": "Itaú formaliza pedido ao OCC para operar como national bank nos EUA, mirando 2,3 mi de clientes de alta renda", "url": "https://www.letsmoney.com.br/noticias/itau-licenca-national-bank-eua", "source": "Let's Money", "pub_date": "2026-03-28", "sentiment": "positive", "impact": "Expansão internacional acelera receita de wealth management e diversifica funding", "tickers": ["Itau"], "summary": "O Itaú Unibanco formalizou junto ao Office of the Comptroller of the Currency (OCC) o pedido para obter licença de national bank nos Estados Unidos. O movimento visa atender diretamente cerca de 2,3 milhões de clientes brasileiros de alta renda com patrimônio offshore, oferecendo produtos de investimento, crédito e câmbio sob regulação americana. A operação pode gerar receitas incrementais relevantes no segmento de wealth management internacional." },
+    { "headline": "BTG Pactual entra no mercado preditivo com lançamento do BTG Trends", "url": "https://www.seudinheiro.com/2026/empresas/btg-pactual-lanca-plataforma-de-previsoes-para-classe-de-investidores-veja-como-vai-funcionar-lvgb/", "source": "Seu Dinheiro", "pub_date": "2026-03-27", "sentiment": "positive", "impact": "Novo produto diversifica receita e atrai base de clientes sofisticados", "tickers": ["BTG"], "summary": "O BTG Pactual lançou o BTG Trends, uma plataforma de mercados preditivos que permite a investidores qualificados negociar derivativos de probabilidade sobre eventos macroeconômicos, como trajetória de juros e desempenho do Ibovespa. O produto inova ao trazer para o mercado brasileiro um formato já consolidado nos EUA e busca atrair uma base de clientes mais sofisticada, diversificando as fontes de receita do banco para além de asset management e investment banking." },
+    { "headline": "Nubank busca licença bancária junto ao BC em 2026 para se adequar à Resolução Conjunta Nº 17", "url": "https://international.nubank.com.br/pt-br/companhia/nubank-pretende-obter-licenca-bancaria-no-brasil-em-2026/", "source": "Nu International", "pub_date": "2026-03-27", "sentiment": "neutral", "impact": "Adequação regulatória obrigatória — pode elevar custos de compliance no curto prazo", "tickers": ["Nubank"], "summary": "O Nubank anunciou que pretende obter licença bancária plena junto ao Banco Central do Brasil ainda em 2026, como parte da adequação à Resolução Conjunta Nº 17. Atualmente operando como instituição de pagamento e SCD, o Nu precisará cumprir exigências adicionais de capital e reporte regulatório. A mudança traz custos de compliance no curto prazo, mas equaliza as condições competitivas com os incumbentes e habilita novas linhas de produto." },
+    { "headline": "Bradesco cria BradSaúde e separa operação de saúde do grupo segurador Bradseg", "url": "https://www.seudinheiro.com/2026/empresas/a-nova-aposta-do-bradesco-bbdc4-como-nasce-a-bradsaude-e-o-que-muda-no-grupo-segurador-miql/", "source": "Seu Dinheiro", "pub_date": "2026-03-28", "sentiment": "positive", "impact": "Separação pode destravar valor do segmento de saúde e melhorar múltiplos do consolidado", "tickers": ["Bradesco"], "summary": "O Bradesco decidiu separar a operação de saúde da Bradseg, criando a BradSaúde como entidade independente. A separação visa dar mais autonomia à vertical de saúde, que tem crescido acima do restante do grupo segurador, e pode destravar valor ao permitir uma avaliação mais transparente pelo mercado. Analistas veem potencial de re-rating do consolidado se a nova unidade demonstrar crescimento consistente e margens superiores ao segmento de seguros tradicional." },
+    { "headline": "PF deflagra operação contra fraudes em crédito que atingiram BB, Bradesco, Santander e Safra", "url": "https://www.feebpr.org.br/noticia/tSQO-operacao-que-mirou-fictor-investiga-fraudes-contra-bb-bradesco-santander-e-safra", "source": "FEEB-PR", "sentiment": "negative", "impact": "Pressão sobre provisões de crédito e potencial aumento de inadimplência reportada", "tickers": ["BB", "Bradesco", "Santander"], "summary": "A Polícia Federal deflagrou operação contra um esquema de fraudes em concessão de crédito que causou prejuízos ao Banco do Brasil, Bradesco, Santander e Safra. O esquema utilizava documentação adulterada para obter empréstimos de grande valor que posteriormente entravam em default. O impacto direto nos balanços deve ser limitado, mas a exposição pode pressionar as provisões de crédito no trimestre e levantar questionamentos sobre os controles internos de originação." },
+    { "headline": "Nubank ultrapassa Bradesco e se torna o 2º maior banco em número de clientes no Brasil", "url": "https://www.poder360.com.br/poder-economia/nubank-passa-bradesco-e-se-torna-o-2o-maior-em-no-de-clientes/", "source": "Poder360", "pub_date": "2026-03-27", "sentiment": "positive", "impact": "Escala valida tese de crescimento, mas monetização por cliente ainda é fração dos incumbentes", "tickers": ["Nubank", "Bradesco"], "summary": "O Nubank ultrapassou o Bradesco em número de clientes ativos no Brasil, tornando-se o segundo maior banco do país nesse quesito, atrás apenas do Itaú. O marco reforça a capacidade de aquisição de clientes do Neo, embora a receita média por cliente (ARPAC) ainda represente uma fração do que os incumbentes geram. O desafio agora é aprofundar a monetização da base, especialmente em produtos de crédito e seguros." },
+    { "headline": "Bancos elevam projeção de crescimento do crédito para 8,2% em 2026", "url": "https://www.cnnbrasil.com.br/economia/macroeconomia/bancos-elevam-expectativa-de-crescimento-do-credito-para-82-em-2026/", "source": "CNN Brasil", "pub_date": "2026-03-28", "sentiment": "positive", "impact": "Crescimento de crédito acima do PIB beneficia todo o setor — atenção à qualidade dos ativos", "tickers": ["Itau", "Bradesco", "BB", "Santander"], "summary": "A pesquisa trimestral da Febraban revelou que os grandes bancos elevaram a projeção de crescimento do crédito em 2026 de 7,5% para 8,2%, puxada por linhas de crédito imobiliário e para PMEs. O número supera o crescimento esperado do PIB e sinaliza expansão real do setor. O ponto de atenção fica na qualidade dos ativos, já que a inadimplência de pessoa física se mantém em patamares elevados e o cenário de juros altos pode comprometer a capacidade de pagamento." },
+    { "headline": "BR Partners vê esforço do mercado para reabrir janela de IPOs — PicPay e AgiBank na Nasdaq", "url": "https://www.seudinheiro.com/2026/bolsa-dolar/ipos-vejo-esforco-das-pessoas-querendo-acreditar-que-existe-uma-janela-diz-diretor-do-br-partners-brbi11-lvgb/", "source": "Seu Dinheiro", "pub_date": "2026-03-28", "sentiment": "positive", "impact": "Pipeline de IPOs gera fees de advisory — positivo para BR Partners e BTG", "tickers": ["BR Partners", "BTG"], "summary": "Executivos da BR Partners comentaram sobre o movimento do mercado para reabrir a janela de IPOs, com destaque para os recentes debuts de PicPay e AgiBank na Nasdaq. Segundo a casa, há um esforço coordenado entre emissores, bancos e investidores para viabilizar novas ofertas, embora a volatilidade global ainda exija desconto nos valuations. O pipeline de operações gera perspectiva positiva de receita de advisory tanto para BR Partners quanto para BTG." },
+    { "headline": "Rede (Itaú) salta de 23% para 27% de market share em adquirência; Mercado Pago lidera crédito", "url": "https://www.folhanosudoeste.com.br/bancos-e-mercado-pago-travam-duelo-pelos-pagamentos-no-pais-ubs-ve-ajustes-rapidos-de-taxas-em-2026-se-a-selic-arrefecer", "source": "Folha no Sudoeste", "sentiment": "positive", "impact": "Rede ganha share relevante — comprime margem de Stone e PagBank no segmento PME", "tickers": ["Itau", "Stone", "PagBank", "Mercado Pago"], "summary": "Dados recentes mostram que a Rede (controlada pelo Itaú) saltou de 23% para 27% de participação no mercado de adquirência, consolidando-se como a principal credenciadora do país. Enquanto isso, o Mercado Pago se destacou como líder em aceitação de pagamentos por crédito entre microempreendedores. O avanço da Rede pressiona as margens de competidores independentes como Stone e PagBank, que operam com custos de funding mais elevados no segmento PME." }
+  ],
+  "classA_global": [
+    { "headline": "Citigroup evacuates Dubai offices after Iran threats — most UAE staff working remotely", "url": "https://www.courthousenews.com/citi-other-companies-evacuate-dubai-financial-district-after-iran-threats/", "source": "Courthouse News", "pub_date": "2026-03-27", "sentiment": "negative", "impact": "Risco geopolítico elevado pode impactar operações de LatAm banks com presença no Golfo", "tickers": ["Citigroup"], "summary": "Citigroup evacuated its Dubai offices and shifted most UAE-based staff to remote work following escalating threats from Iran against financial infrastructure in the Gulf region. The move reflects heightened geopolitical risk that could disrupt banking operations across the Middle East. While direct exposure for LatAm-focused banks is minimal, the conflict's impact on oil prices and global risk appetite could affect emerging market capital flows and trade finance operations." },
+    { "headline": "ECB says eurozone banks' Middle East exposures are limited but conflict still poses risks", "url": "https://www.plataformamedia.com/en/2026/03/26/ecb-eurozone-banks-middle-east-exposure-limited/", "source": "Plataforma Media", "pub_date": "2026-03-26", "sentiment": "neutral", "impact": "Exposição limitada, mas inflação importada via petróleo pode afetar juros globais", "tickers": ["ECB"], "summary": "The European Central Bank assessed that eurozone banks' direct financial exposures to the Middle East remain limited and manageable. However, the ECB warned that the ongoing conflict poses indirect risks through energy price inflation, disrupted supply chains, and potential second-round effects on credit quality. The central bank is monitoring potential spillovers that could affect monetary policy decisions and the trajectory of interest rates in the euro area." },
+    { "headline": "DLocal reports blowout Q4: TPV $13.1B (+70%), revenue $338M (+65%), $300M buyback", "url": "https://www.stocktitan.net/news/DLO/d-local-reports-2025-fourth-quarter-financial-m11toka2fiil.html", "source": "Stock Titan", "pub_date": "2026-03-27", "sentiment": "positive", "impact": "Crescimento orgânico excepcional valida tese — buyback sinaliza confiança do management", "tickers": ["DLocal"], "summary": "DLocal delivered exceptional Q4 2025 results with total payment volume (TPV) of $13.1 billion, up 70% year-over-year, and revenue of $338 million, a 65% increase. The company also announced a $57 million dividend and a $300 million share buyback program, signaling strong confidence from management in future cash generation. The results validate DLocal's cross-border payment thesis in emerging markets and position the stock for continued re-rating." },
+    { "headline": "FSOC votes on new nonbank designation guidance with cost-benefit analysis", "url": "https://home.treasury.gov/news/press-releases/sb0422", "source": "US Treasury", "pub_date": "2026-03-28", "sentiment": "neutral", "impact": "Pode afetar fintechs grandes como Nu e Stone se classificadas como systemically important", "tickers": ["Nubank", "Stone"], "summary": "The Financial Stability Oversight Council (FSOC) voted unanimously to adopt new guidance for designating nonbank financial companies as systemically important. The updated framework introduces a formal cost-benefit analysis and an off-ramp provision for designated entities. For large fintechs with growing systemic footprints — including Nu Holdings and StoneCo — the new rules could eventually trigger enhanced prudential standards and increased regulatory oversight." },
+    { "headline": "Mercado Pago seeks banking licenses in Argentina and Mexico — Brazil on hold", "url": "https://exame.com/invest/mercados/mercado-pago-quer-virar-banco-na-argentina-e-mexico-o-brasil-pode-esperar/", "source": "Exame", "pub_date": "2026-03-28", "sentiment": "positive", "impact": "Expansão bancária regional fortalece ecossistema MeLi — competição com bancos locais", "tickers": ["Mercado Pago"], "summary": "Mercado Pago, the fintech arm of MercadoLibre, is pursuing full banking licenses in Argentina and Mexico while putting its Brazilian license on hold. The strategy prioritizes markets where regulatory barriers are lower and the competitive landscape offers faster returns on banking products. The expansion strengthens MeLi's regional financial ecosystem and positions Mercado Pago as a direct competitor to local banks in deposit-taking, lending, and payments across Latin America." }
+  ],
+  "classB": [
+    { "headline": "Crise na conexão de fintechs ao Pix concentra mercado", "url": "https://neofeed.com.br/negocios/crise-na-conexao-de-fintechs-ao-pix-tem-dois-vencedores-e-corrida-ao-banco-central/", "source": "NeoFeed", "region": "brazil", "sentiment": "negative", "impact": "Concentração de mercado pode beneficiar incumbentes com infraestrutura própria", "tickers": ["Itau", "Bradesco"], "summary": "Fintechs enfrentam dificuldades técnicas para se conectar diretamente ao Pix, levando a uma concentração de mercado em dois provedores aprovados pelo BC. A crise beneficia bancos incumbentes que possuem infraestrutura própria de liquidação." },
+    { "headline": "Fintech investida por BV e Sofisa lança FIDC de R$ 150 milhões", "url": "https://neofeed.com.br/negocios/fintech-investida-por-bv-e-sofisa-lanca-fidc-de-r-150-milhoes-para-expandir-poder-de-fogo/", "source": "NeoFeed", "region": "brazil", "sentiment": "positive", "impact": "BV amplia exposição a crédito via fintechs — modelo asset-light", "tickers": ["BV"], "summary": "Uma fintech com investimento do BV e do Sofisa estruturou um FIDC de R$ 150 milhões para expandir sua capacidade de originação de crédito. O modelo permite ao BV ampliar sua exposição ao segmento de forma asset-light, sem impacto direto no balanço." },
+    { "headline": "Revanche dos bancões: como Itaú, Bradesco, BB e Santander reagiram às fintechs", "url": "https://www.seudinheiro.com/2026/empresas/a-revanche-dos-bancoes-como-itau-bradesco-banco-do-brasil-e-santander-reagiram-a-invasao-das-fintechs-e-por-que-agora-a-guerra-e-outra-miql/", "source": "Seu Dinheiro", "region": "brazil", "sentiment": "positive", "impact": "Incumbentes recuperando terreno — pressão competitiva sobre fintechs em crédito e pagamentos", "tickers": ["Itau", "Bradesco", "BB", "Santander"], "summary": "Reportagem analisa como os grandes bancos brasileiros reagiram à onda de fintechs com investimentos em tecnologia, super apps e aquisições. Itaú, Bradesco, BB e Santander estariam recuperando terreno competitivo, especialmente em crédito digital e pagamentos." },
+    { "headline": "Corrida das stablecoins no Brasil: fintechs saem na frente", "url": "https://neofeed.com.br/economia/a-corrida-das-stablecoins-no-brasil-fintechs-saem-na-frente-e-bancos-esperam-regulamentacao/", "source": "NeoFeed", "region": "brazil", "sentiment": "neutral", "impact": "Novo front competitivo — regulamentação pode nivelar playing field para bancos", "tickers": [], "summary": "Fintechs brasileiras estão liderando a corrida das stablecoins no país, enquanto bancos tradicionais optam por aguardar a regulamentação do Banco Central antes de entrar no mercado. A definição do marco regulatório pode nivelar o campo competitivo." },
+    { "headline": "BC alerta para deterioração da qualidade do crédito — inadimplência rural acima de 8%", "url": "https://bancariosbh.org.br/conteudo/9728/credito-em-2026-entre-juros-altos-e-a-disputa-pelo-futuro-do-financiamento-no-brasil", "source": "Bancários BH", "region": "brazil", "sentiment": "negative", "impact": "Sinal de alerta para carteiras de crédito rural — BB mais exposto", "tickers": ["BB"], "summary": "O Banco Central emitiu alerta sobre a deterioração da qualidade do crédito no Brasil, com destaque para a inadimplência no crédito rural que ultrapassou 8%. O BB, como maior banco de crédito agrícola, é o mais exposto a essa dinâmica." },
+    { "headline": "Stone e PagBank juntas? Mercado aposta em fusão entre as adquirentes", "url": "https://relatorioreservado.com.br/noticias/stone-e-pagbank-juntas-o-mercado-crava-que-sim/", "source": "Relatório Reservado", "region": "brazil", "sentiment": "positive", "impact": "Fusão criaria competidor relevante contra Rede e Cielo — sinergias de custo significativas", "tickers": ["Stone", "PagBank"], "summary": "O mercado especula sobre uma possível fusão entre Stone e PagBank, que criaria um competidor de peso contra Rede (Itaú) e Cielo (Bradesco/BB). As sinergias de custo seriam significativas e a operação combinada teria escala para competir em melhores condições no segmento de PMEs." },
+    { "headline": "dLocal busca aquisição de grande fintech de pagamentos na África", "url": "https://www.bloomberglinea.com/latinoamerica/uruguay/dlocal-busca-quedarse-con-una-de-las-grandes-fintech-de-pagos-y-divisas-de-africa/", "source": "Bloomberg Línea", "region": "global", "sentiment": "positive", "impact": "Diversificação geográfica reduz concentração em LatAm — pode acelerar TAM", "tickers": ["DLocal"], "summary": "A DLocal está negociando a aquisição de uma grande fintech de pagamentos e câmbio na África, buscando diversificar sua operação para além da América Latina. O movimento expandiria significativamente o mercado endereçável total (TAM) da companhia." },
+    { "headline": "Global banks tighten security in Gulf hubs after new Iran threat", "url": "https://www.euronews.com/business/2026/03/12/global-banks-tighten-security-in-gulf-hubs-after-new-iran-threat", "source": "Euronews", "region": "global", "sentiment": "negative", "impact": "Custo operacional sobe para bancos com presença no Golfo", "tickers": [], "summary": "Bancos globais com operações nos hubs financeiros do Golfo Pérsico estão reforçando medidas de segurança após novas ameaças do Irã. O aumento nos custos operacionais e a potencial disrupção nas atividades de trade finance são os principais riscos monitorados." },
+    { "headline": "Fintechs brasileiras fecham no azul nos EUA, com PicPay na contramão", "url": "https://finsidersbrasil.com.br/noticias-sobre-fintechs/fintechs-brasileiras-fecham-no-azul-nos-eua-com-picpay-na-contramao/", "source": "Finsiders", "region": "brazil", "sentiment": "positive", "impact": "Validação do modelo de fintechs BR no mercado americano", "tickers": ["Nubank", "Stone"], "summary": "Fintechs brasileiras listadas nos EUA, como Nubank e Stone, registraram resultados positivos no mercado americano, enquanto PicPay segue na contramão com perdas operacionais. Os resultados validam a tese de internacionalização do modelo de fintechs brasileiras." }
+  ],
+  "history": [
+    { "date": "2026-03-28", "brazil": 10, "global": 8 }
+  ],
+  "keyword_stats": {
+    "Itau": 3, "Nubank": 2, "Bradesco": 4, "BTG": 1, "Santander": 2,
+    "BR Partners": 1, "DLocal": 2, "Stone": 1, "PagBank": 1, "BB": 2,
+    "BV": 1, "Mercado Pago": 2, "Citigroup": 2, "Fintechs": 5,
+    "Credito": 4, "Adquirencia": 2, "Pix": 1, "IPO": 1, "ECB": 2, "Master": 1
+  }
+};
+
+function loadData() {
+  // Try fetch first (works on http/https), fall back to embedded data (works on file://)
+  fetch('ibba_news_data.json?t=' + Date.now())
+    .then(function(r) { if (!r.ok) throw new Error('Arquivo nao encontrado'); return r.json(); })
+    .then(function(data) {
+      NEWS_DATA = data;
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('contentState').style.display = 'block';
+      initWithData();
+    })
+    .catch(function(err) {
+      // Fallback: use embedded data
+      if (EMBEDDED_DATA) {
+        NEWS_DATA = EMBEDDED_DATA;
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('contentState').style.display = 'block';
+        initWithData();
+      } else {
+        document.getElementById('loadingState').innerHTML =
+          '<div style="color:#EF5350;font-size:14px;">Dados indisponiveis<br><small style="color:var(--text-3);">' + err.message + '</small></div>';
+      }
+    });
+}
+
+function initWithData() {
+  var d = new Date(NEWS_DATA.date + 'T12:00:00');
+  document.getElementById('dateDisplay').textContent =
+    d.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Check staleness or empty data
+  var banner = document.getElementById('staleBanner');
+  var today = new Date(); today.setHours(0,0,0,0);
+  var dataDay = new Date(NEWS_DATA.date + 'T00:00:00');
+  var totalNews = (NEWS_DATA.classA_brazil || []).length + (NEWS_DATA.classA_global || []).length;
+
+  if (totalNews === 0) {
+    document.getElementById('staleTitle').textContent = 'Sem noticias carregadas';
+    document.getElementById('staleDesc').innerHTML = 'O dashboard esta vazio. Peça uma atualização no Cowork e depois pressione <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> para recarregar.';
+    banner.classList.add('show');
+  } else if (dataDay.getTime() < today.getTime()) {
+    var diff = Math.round((today - dataDay) / 86400000);
+    document.getElementById('staleTitle').textContent = 'Dados de ' + diff + (diff === 1 ? ' dia atras' : ' dias atras');
+    document.getElementById('staleDesc').innerHTML = 'Os dados carregados sao de ' + d.toLocaleDateString('pt-BR') + '. Peça uma atualização no Cowork e depois pressione <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> para recarregar.';
+    banner.classList.add('show');
+  } else {
+    banner.classList.remove('show');
+  }
+
+  renderStats();
+
+  state.brazil = NEWS_DATA.classA_brazil.map(function(n, i) {
+    return Object.assign({}, n, { id: 'br_' + i, selected: true, region: 'brazil' });
+  });
+  state.global = NEWS_DATA.classA_global.map(function(n, i) {
+    return Object.assign({}, n, { id: 'gl_' + i, selected: true, region: 'global' });
+  });
+  state.bench = NEWS_DATA.classB.map(function(n, i) {
+    return Object.assign({}, n, { id: 'bn_' + i, selected: false });
+  });
+  render();
+}
+
+function render() {
+  buildFilterBar();
+  renderList('listBR', state.brazil, 'A');
+  renderList('listGL', state.global, 'A');
+  renderList('listBN', state.bench, 'B');
+
+  var sb = state.brazil.filter(function(n) { return n.selected; }).length;
+  var sg = state.global.filter(function(n) { return n.selected; }).length;
+  document.getElementById('countBR').textContent = sb;
+  document.getElementById('countGL').textContent = sg;
+  document.getElementById('countBench').textContent = state.bench.length;
+  document.getElementById('badgeBR').textContent = sb + ' selecionadas';
+  document.getElementById('badgeGL').textContent = sg + ' selecionadas';
+  document.getElementById('badgeBN').textContent = state.bench.length + ' disponiveis';
+  renderPreview();
+}
+
+function formatPubDate(dateStr) {
+  if (!dateStr) return null;
+  var d = new Date(dateStr + 'T12:00:00');
+  if (isNaN(d.getTime())) return null;
+  var today = new Date(); today.setHours(0,0,0,0);
+  var dDay = new Date(dateStr + 'T00:00:00');
+  var diff = Math.round((today - dDay) / 86400000);
+  var label = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+  if (diff === 0) return { label: 'Hoje', cls: 'today' };
+  if (diff === 1) return { label: 'Ontem', cls: 'old' };
+  if (diff > 1) return { label: label + ' (' + diff + 'd)', cls: 'old' };
+  return { label: label, cls: '' };
+}
+
+var activeFilter = null;
+
+function buildFilterBar() {
+  var allTickers = {};
+  [state.brazil, state.global, state.bench].forEach(function(list) {
+    list.forEach(function(n) {
+      (n.tickers || []).forEach(function(t) { allTickers[t] = (allTickers[t] || 0) + 1; });
+    });
+  });
+  var sorted = Object.keys(allTickers).sort(function(a, b) { return allTickers[b] - allTickers[a]; });
+  var fb = document.getElementById('filterBar');
+  if (!sorted.length) { fb.innerHTML = ''; return; }
+  var h = '<button class="filter-chip all' + (!activeFilter ? ' active' : '') + '" onclick="setFilter(null)">Todas</button>';
+  sorted.forEach(function(t) {
+    h += '<button class="filter-chip' + (activeFilter === t ? ' active' : '') + '" onclick="setFilter(\'' + esc(t) + '\')">' + esc(t) + ' <span style="opacity:0.5">' + allTickers[t] + '</span></button>';
+  });
+  fb.innerHTML = h;
+}
+
+function setFilter(ticker) {
+  activeFilter = ticker;
+  render();
+}
+
+function filterItems(items) {
+  if (!activeFilter) return items;
+  return items.filter(function(n) {
+    return (n.tickers || []).indexOf(activeFilter) !== -1;
+  });
+}
+
+function renderList(id, items, cls) {
+  var el = document.getElementById(id);
+  var filtered = filterItems(items);
+  if (!filtered.length) {
+    el.innerHTML = '<div class="empty">' + (activeFilter ? 'Nenhuma noticia sobre ' + esc(activeFilter) : 'Nenhuma noticia') + '</div>';
+    return;
+  }
+  var sentLabels = { positive: 'Positivo', negative: 'Negativo', neutral: 'Neutro' };
+  var sentCls = { positive: 'pos', negative: 'neg', neutral: 'neu' };
+  var h = '';
+  filtered.forEach(function(it) {
+    h += '<div class="news-item">';
+    h += '<div class="chk ' + (it.selected ? 'on' : '') + '" onclick="toggle(\'' + it.id + '\',\'' + cls + '\')"></div>';
+    if (it.summary) {
+      h += '<button class="n-expand-btn" title="Ver resumo" onclick="toggleSummary(this)">&#9660;</button>';
+    }
+    h += '<div class="n-body">';
+    h += '<div class="n-title">' + esc(it.headline) + '</div>';
+    if (it.impact) h += '<div class="n-impact">' + esc(it.impact) + '</div>';
+    if (it.tickers && it.tickers.length) {
+      h += '<div class="n-tickers">';
+      it.tickers.forEach(function(t) { h += '<span class="n-ticker">' + esc(t) + '</span>'; });
+      h += '</div>';
+    }
+    h += '<div class="n-meta">';
+    if (it.source) h += '<span class="n-src">' + esc(it.source) + '</span>';
+    if (it.sentiment) h += '<span class="n-sent ' + (sentCls[it.sentiment] || 'neu') + '">' + (sentLabels[it.sentiment] || it.sentiment) + '</span>';
+    var pd = formatPubDate(it.pub_date);
+    if (pd) {
+      h += '<span class="n-date ' + pd.cls + '">' + pd.label + '</span>';
+    } else {
+      h += '<span class="n-warn" title="Data nao confirmada">?</span>';
+    }
+    h += '<a class="n-url" href="' + it.url + '" target="_blank">' + shortUrl(it.url) + '</a>';
+    h += '</div>';
+    if (it.summary) {
+      h += '<div class="n-summary" id="sum_' + it.id + '">' + esc(it.summary) + '</div>';
+    }
+    h += '</div>';
+    h += '<div class="item-acts">';
+    if (cls === 'B') {
+      h += '<button class="act up" title="Promover para Classe A" onclick="promote(\'' + it.id + '\')">&#8593;</button>';
+    } else {
+      var from = id === 'listBR' ? 'brazil' : 'global';
+      h += '<button class="act dn" title="Mover para reserva" onclick="demote(\'' + it.id + '\',\'' + from + '\')">&#8595;</button>';
+    }
+    h += '</div></div>';
+  });
+  el.innerHTML = h;
+}
+
+function toggleSummary(btn) {
+  var item = btn.closest('.news-item');
+  var sum = item.querySelector('.n-summary');
+  if (!sum) return;
+  var isOpen = sum.classList.contains('open');
+  sum.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+function toggle(id, cls) {
+  var lists = cls === 'B' ? [state.bench] : [state.brazil, state.global];
+  lists.forEach(function(l) { l.forEach(function(n) { if (n.id === id) n.selected = !n.selected; }); });
+  render();
+}
+
+function promote(id) {
+  var i = state.bench.findIndex(function(n) { return n.id === id; });
+  if (i < 0) return;
+  var it = state.bench.splice(i, 1)[0];
+  it.selected = true;
+  (it.region === 'brazil' ? state.brazil : state.global).push(it);
+  render();
+}
+
+function demote(id, from) {
+  var list = from === 'brazil' ? state.brazil : state.global;
+  var i = list.findIndex(function(n) { return n.id === id; });
+  if (i < 0) return;
+  var it = list.splice(i, 1)[0];
+  it.selected = false; it.region = from;
+  state.bench.push(it);
+  render();
+}
+
+function resetAll() { if (NEWS_DATA && confirm('Resetar para a curadoria original?')) initWithData(); }
+
+function renderPreview() {
+  var t = '*IBBA Financial Daily News*\n\n\n> Brazil\n\n';
+  var brSel = state.brazil.filter(function(n) { return n.selected; });
+  brSel.forEach(function(n) { t += '- *' + n.headline + '*\n' + n.url + '\n\n'; });
+  t += '\n> Global\n\n';
+  var glSel = state.global.filter(function(n) { return n.selected; });
+  glSel.forEach(function(n) { t += '- *' + n.headline + '*\n' + n.url + '\n\n'; });
+  document.getElementById('previewBox').textContent = t.trim();
+  var pc = document.getElementById('previewCount');
+  if (pc) pc.textContent = (brSel.length + glSel.length) + ' noticias';
+}
+
+function copyToClipboard() {
+  var t = document.getElementById('previewBox').textContent;
+  navigator.clipboard.writeText(t).then(function() { showToast('Copiado para a area de transferencia!'); })
+    .catch(function() {
+      var a = document.createElement('textarea'); a.value = t;
+      document.body.appendChild(a); a.select(); document.execCommand('copy');
+      document.body.removeChild(a); showToast('Copiado!');
+    });
+}
+
+function switchView(v) {
+  document.querySelectorAll('.view').forEach(function(e) { e.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(e) { e.classList.remove('active'); });
+  if (v === 'preview') {
+    document.getElementById('previewView').classList.add('active');
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    renderPreview();
+  } else if (v === 'stats') {
+    document.getElementById('statsView').classList.add('active');
+    document.querySelectorAll('.tab-btn')[2].classList.add('active');
+    renderStats();
+  } else {
+    document.getElementById('editView').classList.add('active');
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+  }
+}
+
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(function() { el.classList.remove('show'); }, 2500);
+}
+
+function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function renderStats() {
+  var hist = NEWS_DATA.history || [];
+  var kw = NEWS_DATA.keyword_stats || {};
+
+  // Summary cards
+  var totalNews = 0;
+  var totalBR = 0, totalGL = 0;
+  hist.forEach(function(h) {
+    totalBR += (h.brazil || 0);
+    totalGL += (h.global || 0);
+    totalNews += (h.brazil || 0) + (h.global || 0);
+  });
+  var avg = hist.length > 0 ? (totalNews / hist.length).toFixed(1).replace('.0', '') : '0';
+
+  var badge = document.getElementById('statsHistDays');
+  if (badge) badge.textContent = hist.length + (hist.length === 1 ? ' dia' : ' dias');
+
+  var sc = document.getElementById('summaryCards');
+  sc.innerHTML =
+    '<div class="summary-card"><div class="sc-val" style="color:var(--text)">' + totalNews + '</div><div class="sc-label">Total Enviados</div></div>' +
+    '<div class="summary-card"><div class="sc-val" style="color:var(--orange)">' + totalBR + '</div><div class="sc-label">Brasil</div></div>' +
+    '<div class="summary-card"><div class="sc-val" style="color:#64B5F6">' + totalGL + '</div><div class="sc-label">Global</div></div>' +
+    '<div class="summary-card"><div class="sc-val" style="color:var(--text)">' + avg + '</div><div class="sc-label">Media / Dia</div></div>';
+
+  // 7-day chart
+  var last7 = hist.slice(-7);
+  var chartEl = document.getElementById('statsChartArea');
+  if (last7.length < 2) {
+    chartEl.innerHTML = '<div class="stats-chart-empty">O grafico aparecera a partir do 2o dia de dados</div>';
+  } else {
+    var maxVal = 1;
+    last7.forEach(function(h) {
+      var t = (h.brazil || 0) + (h.global || 0);
+      if (t > maxVal) maxVal = t;
+    });
+    var dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+    var ch = '<div class="stats-chart-bars">';
+    last7.forEach(function(entry) {
+      var dd = new Date(entry.date + 'T12:00:00');
+      var dayName = dias[dd.getDay()];
+      var brH = Math.max(4, Math.round(((entry.brazil || 0) / maxVal) * 72));
+      var glH = Math.max(4, Math.round(((entry.global || 0) / maxVal) * 72));
+      ch += '<div class="stats-chart-col">';
+      ch += '<div class="stats-bar-wrap">';
+      ch += '<div class="stats-bar br" style="height:' + brH + 'px"><span class="stats-bar-tip">' + (entry.brazil || 0) + '</span></div>';
+      ch += '<div class="stats-bar gl" style="height:' + glH + 'px"><span class="stats-bar-tip">' + (entry.global || 0) + '</span></div>';
+      ch += '</div>';
+      ch += '<div class="stats-chart-day">' + dayName + '</div>';
+      ch += '</div>';
+    });
+    ch += '</div>';
+    chartEl.innerHTML = ch;
+  }
+
+  // Keyword horizontal bars
+  var kwArea = document.getElementById('keywordBarsArea');
+  var entries = [];
+  for (var k in kw) { if (kw.hasOwnProperty(k)) entries.push({ name: k, count: kw[k] }); }
+  entries.sort(function(a, b) { return b.count - a.count; });
+
+  if (entries.length === 0) {
+    kwArea.innerHTML = '<div class="stats-chart-empty">Sem dados de mencoes ainda</div>';
+    return;
+  }
+
+  var maxKw = entries[0].count;
+  var colors = [
+    '#EC7000', '#FF8C1A', '#F4A940', '#64B5F6', '#42A5F5',
+    '#90CAF9', '#CE93D8', '#F48FB1', '#80CBC4', '#A5D6A7',
+    '#FFD54F', '#FF8A65', '#E0E0E0', '#B0BEC5', '#9FA8DA',
+    '#80DEEA', '#FFAB91', '#C5E1A5', '#FFF176', '#EF9A9A'
+  ];
+
+  var bh = '';
+  entries.forEach(function(e, i) {
+    var pct = Math.max(3, Math.round((e.count / maxKw) * 100));
+    var color = colors[i % colors.length];
+    bh += '<div class="hbar-row">';
+    bh += '<div class="hbar-label">' + esc(e.name) + '</div>';
+    bh += '<div class="hbar-track">';
+    bh += '<div class="hbar-fill" style="width:' + pct + '%;background:' + color + '">';
+    if (pct > 12) bh += '<span class="hbar-val">' + e.count + '</span>';
+    bh += '</div></div>';
+    if (pct <= 12) bh += '<span class="hbar-val-out">' + e.count + '</span>';
+    bh += '</div>';
+  });
+  kwArea.innerHTML = bh;
+
+  var kwBadge = document.getElementById('statsKwBadge');
+  if (kwBadge) kwBadge.textContent = entries.length + ' temas rastreados';
+}
+
+function shortUrl(u) {
+  try { var p = new URL(u); return p.hostname.replace('www.','') + p.pathname.slice(0, 35) + (p.pathname.length > 35 ? '...' : ''); }
+  catch(e) { return u.slice(0, 50); }
+}
+
+loadData();
+</script>
+</body>
+</html>
