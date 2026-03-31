@@ -10,97 +10,105 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #08090C; color: #E0E0E0; line-height: 1.6; }
-
-        .header { background: #111318; border-bottom: 1px solid #1E2129; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-        .header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #EC7000, #FF8C1A, #EC7000); }
-        .header { position: relative; overflow: hidden; }
-        .header-left { display: flex; align-items: center; gap: 12px; z-index: 1; }
-        .logo { width: 36px; height: 36px; background: linear-gradient(135deg, #EC7000, #D35F00); border-radius: 8px; }
-        .header-title h1 { font-size: 1.15rem; font-weight: 700; color: #FFF; }
-        .badges { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-        .badge { background: #181B22; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; color: #999; border: 1px solid #2A2E35; }
-
+        .header { background: #111318; border-bottom: 1px solid #1E2129; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; position: relative; }
+        .header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #EC7000, #FF9933, #EC7000); }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .logo { width: 36px; height: 36px; background: linear-gradient(135deg, #EC7000, #C45A00); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 700; color: #FFF; letter-spacing: 0.3px; flex-shrink: 0; }
+        .header-title h1 { font-size: 1.1rem; font-weight: 700; color: #FFF; line-height: 1.2; }
+        .header-title p { font-size: 0.72rem; color: #555; margin-top: 2px; letter-spacing: 0.2px; }
+        .badges { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+        .badge { background: #181B22; padding: 0.28rem 0.65rem; border-radius: 6px; font-size: 0.75rem; color: #666; border: 1px solid #22262F; }
+        .badge strong { color: #BBB; font-weight: 600; }
         .tabs-container { background: #111318; border-bottom: 1px solid #1E2129; padding: 0 2rem; display: flex; gap: 2rem; }
-        .tab-btn { padding: 0.9rem 0; background: none; border: none; color: #666; cursor: pointer; font-size: 0.9rem; font-weight: 600; border-bottom: 2px solid transparent; font-family: inherit; }
+        .tab-btn { padding: 0.85rem 0; background: none; border: none; color: #555; cursor: pointer; font-size: 0.875rem; font-weight: 600; border-bottom: 2px solid transparent; font-family: inherit; transition: color 0.15s; }
         .tab-btn.active { color: #EC7000; border-bottom-color: #EC7000; }
-        .tab-btn:hover { color: #AAA; }
-
-        .tab-content { display: none; padding: 2rem; max-width: 960px; margin: 0 auto; }
+        .tab-btn:hover:not(.active) { color: #999; }
+        .tab-content { display: none; padding: 1.75rem 2rem; max-width: 960px; margin: 0 auto; }
         .tab-content.active { display: block; }
-
-        .section-title { font-size: 1rem; font-weight: 700; color: #FFF; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 2px solid #EC7000; display: flex; align-items: center; gap: 0.5rem; }
-        .section-title .count { font-size: 0.75rem; background: #EC7000; color: #FFF; padding: 0.15rem 0.5rem; border-radius: 10px; font-weight: 600; }
+        .section-title { font-size: 0.75rem; font-weight: 700; color: #888; margin-bottom: 0.875rem; padding-bottom: 0.5rem; border-bottom: 1px solid #1A1D24; display: flex; align-items: center; gap: 0.5rem; text-transform: uppercase; letter-spacing: 0.8px; }
+        .section-title::before { content: ''; display: inline-block; width: 3px; height: 12px; background: #EC7000; border-radius: 2px; flex-shrink: 0; }
+        .count { font-size: 0.68rem; background: #1A1D24; color: #666; padding: 0.1rem 0.45rem; border-radius: 10px; font-weight: 600; letter-spacing: 0; text-transform: none; }
         .news-section { margin-bottom: 2rem; }
-
-        .card { background: #111318; border: 1px solid #1E2129; border-radius: 8px; padding: 1.1rem 1.25rem; margin-bottom: 0.75rem; transition: border-color 0.2s; }
-        .card:hover { border-color: #333; }
+        .card { background: #111318; border: 1px solid #1A1D24; border-radius: 8px; padding: 0.95rem 1.1rem; margin-bottom: 0.55rem; transition: border-color 0.15s; }
+        .card:hover { border-color: #2A2E38; }
         .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
-        .card-headline { font-size: 0.95rem; font-weight: 600; flex: 1; }
-        .card-headline a { color: #EC7000; text-decoration: none; }
-        .card-headline a:hover { color: #FF8C1A; }
-        .card-meta { font-size: 0.8rem; color: #777; margin-top: 0.4rem; }
-        .tickers { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.6rem; }
-        .ticker { background: #181B22; padding: 0.2rem 0.55rem; border-radius: 4px; font-size: 0.7rem; color: #EC7000; border: 1px solid #2A2E35; font-weight: 600; }
-        .expand-btn { background: none; border: none; color: #666; cursor: pointer; font-size: 0.85rem; padding: 0.2rem; transition: color 0.2s; flex-shrink: 0; }
-        .expand-btn:hover { color: #EC7000; }
-        .summary { display: none; background: #0D0E12; padding: 0.75rem; border-radius: 6px; margin-top: 0.6rem; font-size: 0.85rem; color: #AAA; border-left: 3px solid #EC7000; line-height: 1.7; }
+        .card-headline { font-size: 0.9rem; font-weight: 600; flex: 1; line-height: 1.45; }
+        .card-headline a { color: #D8D8D8; text-decoration: none; }
+        .card-headline a:hover { color: #EC7000; }
+        .card-meta { font-size: 0.73rem; color: #4A4F5A; margin-top: 0.3rem; }
+        .card-actions { display: flex; gap: 0.25rem; flex-shrink: 0; }
+        .tickers { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
+        .ticker { background: #0C0D10; padding: 0.12rem 0.48rem; border-radius: 4px; font-size: 0.67rem; color: #EC7000; border: 1px solid #1A1D24; font-weight: 600; }
+        .action-btn { background: none; border: 1px solid #1A1D24; color: #4A4F5A; cursor: pointer; font-size: 0.67rem; padding: 0.18rem 0.45rem; border-radius: 4px; font-family: inherit; white-space: nowrap; transition: all 0.15s; }
+        .action-btn:hover { border-color: #EC7000; color: #EC7000; }
+        .expand-btn { background: none; border: none; color: #3A3F4A; cursor: pointer; padding: 0.2rem 0.3rem; font-size: 0.72rem; transition: color 0.15s, transform 0.2s; display: flex; align-items: center; }
+        .expand-btn:hover { color: #777; }
+        .summary { display: none; background: #0C0D10; padding: 0.7rem 0.85rem; border-radius: 6px; margin-top: 0.6rem; font-size: 0.82rem; color: #888; border-left: 2px solid #EC7000; line-height: 1.75; }
         .summary.open { display: block; }
-
-        .tier-b-toggle { background: none; border: none; color: #EC7000; cursor: pointer; font-size: 0.9rem; font-weight: 700; padding: 0; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; font-family: inherit; }
-        .tier-b-toggle:hover { color: #FF8C1A; }
+        .tier-b-toggle { background: none; border: none; color: #4A4F5A; cursor: pointer; font-size: 0.72rem; font-weight: 700; padding: 0; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; font-family: inherit; text-transform: uppercase; letter-spacing: 0.8px; transition: color 0.15s; }
+        .tier-b-toggle:hover { color: #888; }
         .tier-b-content { display: none; }
         .tier-b-content.open { display: block; }
-        .region-badge { display: inline-block; background: #181B22; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; color: #888; border: 1px solid #2A2E35; margin-left: 0.5rem; }
-
-        .wa-container { max-width: 560px; margin: 0 auto; }
-        .wa-preview { background: #1A1A1A; border: 1px solid #1E2129; border-radius: 12px; padding: 1.5rem; font-size: 0.85rem; line-height: 1.9; color: #E0E0E0; font-family: 'Courier New', monospace; white-space: pre-wrap; word-wrap: break-word; margin-bottom: 1.25rem; max-height: 70vh; overflow-y: auto; }
-        .copy-btn { width: 100%; padding: 0.9rem; background: #EC7000; border: none; border-radius: 8px; color: #FFF; font-size: 0.95rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; }
-        .copy-btn:hover { background: #FF8C1A; }
-        .copy-ok { display: none; text-align: center; color: #22C55E; font-size: 0.85rem; margin-top: 0.6rem; }
+        .region-badge { display: inline-block; background: #0C0D10; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.62rem; color: #4A4F5A; border: 1px solid #1A1D24; margin-left: 0.4rem; text-transform: uppercase; letter-spacing: 0.3px; }
+        .empty-state { color: #333; font-size: 0.8rem; padding: 0.25rem 0; }
+        .wa-container { max-width: 540px; margin: 0 auto; }
+        .wa-preview { background: #0C0D10; border: 1px solid #1A1D24; border-radius: 8px; padding: 1.25rem; font-size: 0.82rem; line-height: 2; color: #BBB; font-family: 'Courier New', monospace; white-space: pre-wrap; word-wrap: break-word; margin-bottom: 1rem; max-height: 70vh; overflow-y: auto; }
+        .copy-btn { width: 100%; padding: 0.85rem; background: #EC7000; border: none; border-radius: 8px; color: #FFF; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+        .copy-btn:hover { background: #C45A00; }
+        .copy-ok { display: none; text-align: center; color: #4ADE80; font-size: 0.78rem; margin-top: 0.5rem; font-weight: 500; }
         .copy-ok.show { display: block; }
-
+        .toast { position: fixed; bottom: 1.75rem; left: 50%; transform: translateX(-50%); background: #1A1D24; color: #CCC; border: 1px solid #2A2E38; padding: 0.5rem 1.1rem; border-radius: 8px; font-size: 0.78rem; font-weight: 500; opacity: 0; transition: opacity 0.25s; pointer-events: none; z-index: 100; white-space: nowrap; }
+        .toast.show { opacity: 1; }
         @media (max-width: 768px) {
-            .header { padding: 1rem; }
-            .header-title h1 { font-size: 1rem; }
-            .tabs-container { padding: 0 1rem; gap: 1rem; }
-            .tab-content { padding: 1rem; }
+            .header, .tab-content { padding-left: 1rem; padding-right: 1rem; }
+            .tabs-container { padding: 0 1rem; gap: 1.5rem; }
         }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="header-left">
-            <div class="logo"></div>
-            <div class="header-title"><h1>IBBA Financial Daily News</h1></div>
+            <div class="logo">IBBA</div>
+            <div class="header-title">
+                <h1>Financial Daily News</h1>
+                <p>Equity Research &mdash; Financials</p>
+            </div>
         </div>
         <div class="badges">
             <div class="badge" id="dateBadge"></div>
-            <div class="badge" id="newsBadge"></div>
+            <div class="badge" id="brBadge"></div>
+            <div class="badge" id="glBadge"></div>
+            <div class="badge" id="tbBadge"></div>
         </div>
     </div>
-
     <div class="tabs-container">
         <button class="tab-btn active" onclick="switchTab('curadoria',this)">Curadoria</button>
         <button class="tab-btn" onclick="switchTab('whatsapp',this)">WhatsApp</button>
     </div>
-
     <div id="curadoria" class="tab-content active">
-        <div class="news-section"><h2 class="section-title">Brasil <span class="count" id="brCount"></span></h2><div id="brCards"></div></div>
-        <div class="news-section"><h2 class="section-title">Global <span class="count" id="glCount"></span></h2><div id="glCards"></div></div>
         <div class="news-section">
-            <button class="tier-b-toggle" onclick="toggleTierB()"><span id="tbIcon">&#9654;</span> Tier B <span class="count" id="tbCount"></span></button>
+            <h2 class="section-title">Brasil <span class="count" id="brCount"></span></h2>
+            <div id="brCards"></div>
+        </div>
+        <div class="news-section">
+            <h2 class="section-title">Global <span class="count" id="glCount"></span></h2>
+            <div id="glCards"></div>
+        </div>
+        <div class="news-section">
+            <button class="tier-b-toggle" onclick="toggleTierB()">
+                <span id="tbIcon">&#9654;</span> Tier B <span class="count" id="tbCount"></span>
+            </button>
             <div id="tbContent" class="tier-b-content"><div id="tbCards"></div></div>
         </div>
     </div>
-
     <div id="whatsapp" class="tab-content">
         <div class="wa-container">
             <div class="wa-preview" id="waPreview"></div>
-            <button class="copy-btn" onclick="copyWA()">Copiar</button>
-            <div class="copy-ok" id="copyOk">Copiado!</div>
+            <button class="copy-btn" onclick="copyWA()">Copiar para WhatsApp</button>
+            <div class="copy-ok" id="copyOk">&#10003; Copiado!</div>
         </div>
     </div>
-
+    <div class="toast" id="toast"></div>
 <script>
 var EMBEDDED_DATA = {
     date: "2026-03-30",
@@ -118,69 +126,111 @@ var EMBEDDED_DATA = {
         { headline: "Credicorp reports record quarterly profits in Peru", url: "https://latinfinance.com/credicorp-q1-profits", source: "Latin Finance", pub_date: "2026-03-27", region: "global", tickers: ["Credicorp"], summary: "Credicorp's Q1 results beat estimates driven by strong loan growth and improved asset quality in Peru." }
     ]
 };
-
-function init() {
-    var d = EMBEDDED_DATA;
-    // Date badge
+var data = JSON.parse(JSON.stringify(EMBEDDED_DATA));
+function toast(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(function() { el.classList.remove('show'); }, 1800);
+}
+function render() {
+    var d = data;
     var dt = new Date(d.date + 'T12:00:00');
     var months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
     document.getElementById('dateBadge').textContent = dt.getDate() + ' ' + months[dt.getMonth()] + ' ' + dt.getFullYear();
-    // News count
-    var total = d.classA_brazil.length + d.classA_global.length + d.classB.length;
-    document.getElementById('newsBadge').textContent = total + ' notícias';
+    document.getElementById('brBadge').innerHTML = '<strong>' + d.classA_brazil.length + '</strong> Brasil';
+    document.getElementById('glBadge').innerHTML = '<strong>' + d.classA_global.length + '</strong> Global';
+    document.getElementById('tbBadge').innerHTML = '<strong>' + d.classB.length + '</strong> Tier B';
     document.getElementById('brCount').textContent = d.classA_brazil.length;
     document.getElementById('glCount').textContent = d.classA_global.length;
     document.getElementById('tbCount').textContent = d.classB.length;
-    // Render
-    document.getElementById('brCards').innerHTML = d.classA_brazil.map(function(item, i) { return card(item, 'br-' + i); }).join('');
-    document.getElementById('glCards').innerHTML = d.classA_global.map(function(item, i) { return card(item, 'gl-' + i); }).join('');
-    document.getElementById('tbCards').innerHTML = d.classB.map(function(item, i) { return cardB(item, 'tb-' + i); }).join('');
-    // WhatsApp
+    document.getElementById('brCards').innerHTML = d.classA_brazil.map(function(item, i) { return cardA(item, 'br', i); }).join('');
+    document.getElementById('glCards').innerHTML = d.classA_global.map(function(item, i) { return cardA(item, 'gl', i); }).join('');
+    document.getElementById('tbCards').innerHTML = d.classB.length
+        ? d.classB.map(function(item, i) { return cardTB(item, i); }).join('')
+        : '<p class="empty-state">Nenhuma notícia Tier B hoje.</p>';
+    updateWA();
+}
+function cardA(item, list, idx) {
+    var id = list + '-' + idx;
+    var tks = item.tickers && item.tickers.length ? '<div class="tickers">' + item.tickers.map(function(t) { return '<span class="ticker">' + esc(t) + '</span>'; }).join('') + '</div>' : '';
+    return '<div class="card">' +
+        '<div class="card-top">' +
+            '<h3 class="card-headline"><a href="' + esc(item.url) + '" target="_blank" rel="noopener">' + esc(item.headline) + '</a></h3>' +
+            '<div class="card-actions">' +
+                '<button class="action-btn" onclick="demote(\'' + list + '\',' + idx + ')">Tier B</button>' +
+                '<button class="expand-btn" onclick="toggleSummary(\'' + id + '\',this)">&#9660;</button>' +
+            '</div>' +
+        '</div>' +
+        '<div class="card-meta">' + esc(item.source) + ' &bull; ' + esc(item.pub_date || '') + '</div>' +
+        tks +
+        '<div class="summary" id="' + id + '">' + esc(item.summary || '') + '</div>' +
+    '</div>';
+}
+function cardTB(item, idx) {
+    var id = 'tb-' + idx;
+    var reg = item.region ? '<span class="region-badge">' + esc(item.region) + '</span>' : '';
+    var tks = item.tickers && item.tickers.length ? '<div class="tickers">' + item.tickers.map(function(t) { return '<span class="ticker">' + esc(t) + '</span>'; }).join('') + '</div>' : '';
+    var lbl = item.region === 'global' ? '&#8593; Global' : '&#8593; Brasil';
+    return '<div class="card">' +
+        '<div class="card-top">' +
+            '<h3 class="card-headline"><a href="' + esc(item.url) + '" target="_blank" rel="noopener">' + esc(item.headline) + '</a>' + reg + '</h3>' +
+            '<div class="card-actions">' +
+                '<button class="action-btn" onclick="promote(' + idx + ')">' + lbl + '</button>' +
+                '<button class="expand-btn" onclick="toggleSummary(\'' + id + '\',this)">&#9660;</button>' +
+            '</div>' +
+        '</div>' +
+        '<div class="card-meta">' + esc(item.source) + ' &bull; ' + esc(item.pub_date || '') + '</div>' +
+        tks +
+        '<div class="summary" id="' + id + '">' + esc(item.summary || '') + '</div>' +
+    '</div>';
+}
+function demote(list, idx) {
+    var src = list === 'br' ? data.classA_brazil : data.classA_global;
+    var item = src.splice(idx, 1)[0];
+    item.region = list === 'br' ? 'brazil' : 'global';
+    data.classB.push(item);
+    toast('"' + item.headline.substring(0, 45) + '..." → Tier B');
+    render();
+}
+function promote(idx) {
+    var item = data.classB.splice(idx, 1)[0];
+    if (item.region === 'global') { data.classA_global.push(item); toast('"' + item.headline.substring(0, 45) + '..." → Global'); }
+    else { data.classA_brazil.push(item); toast('"' + item.headline.substring(0, 45) + '..." → Brasil'); }
+    render();
+}
+function updateWA() {
     var wa = '*IBBA Financial Daily News*\n\n\n> Brazil\n\n';
-    d.classA_brazil.forEach(function(item) { wa += '- *' + item.headline + '*\n' + item.url + '\n\n'; });
+    data.classA_brazil.forEach(function(item) { wa += '- *' + item.headline + '*\n' + item.url + '\n\n'; });
     wa += '\n> Global\n\n';
-    d.classA_global.forEach(function(item) { wa += '- *' + item.headline + '*\n' + item.url + '\n\n'; });
+    data.classA_global.forEach(function(item) { wa += '- *' + item.headline + '*\n' + item.url + '\n\n'; });
     document.getElementById('waPreview').textContent = wa.trim();
 }
-
-function card(item, id) {
-    var tks = item.tickers && item.tickers.length ? '<div class="tickers">' + item.tickers.map(function(t) { return '<span class="ticker">' + esc(t) + '</span>'; }).join('') + '</div>' : '';
-    return '<div class="card"><div class="card-top"><h3 class="card-headline"><a href="' + esc(item.url) + '" target="_blank">' + esc(item.headline) + '</a></h3><button class="expand-btn" onclick="toggle(\'' + id + '\')">&#9660;</button></div><div class="card-meta">' + esc(item.source) + ' &bull; ' + esc(item.pub_date) + '</div>' + tks + '<div class="summary" id="' + id + '">' + esc(item.summary || '') + '</div></div>';
-}
-
-function cardB(item, id) {
-    var tks = item.tickers && item.tickers.length ? '<div class="tickers">' + item.tickers.map(function(t) { return '<span class="ticker">' + esc(t) + '</span>'; }).join('') + '</div>' : '';
-    var reg = item.region ? '<span class="region-badge">' + esc(item.region) + '</span>' : '';
-    return '<div class="card"><div class="card-top"><h3 class="card-headline"><a href="' + esc(item.url) + '" target="_blank">' + esc(item.headline) + '</a>' + reg + '</h3><button class="expand-btn" onclick="toggle(\'' + id + '\')">&#9660;</button></div><div class="card-meta">' + esc(item.source) + ' &bull; ' + esc(item.pub_date) + '</div>' + tks + '<div class="summary" id="' + id + '">' + esc(item.summary || '') + '</div></div>';
-}
-
 function esc(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
-
-function toggle(id) { document.getElementById(id).classList.toggle('open'); }
-
+function toggleSummary(id, btn) {
+    var el = document.getElementById(id);
+    el.classList.toggle('open');
+    btn.style.transform = el.classList.contains('open') ? 'rotate(180deg)' : '';
+}
 function toggleTierB() {
     var c = document.getElementById('tbContent');
     c.classList.toggle('open');
     document.getElementById('tbIcon').innerHTML = c.classList.contains('open') ? '&#9660;' : '&#9654;';
 }
-
 function switchTab(name, btn) {
     document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
     document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
     document.getElementById(name).classList.add('active');
     btn.classList.add('active');
 }
-
 function copyWA() {
-    var text = document.getElementById('waPreview').textContent;
-    navigator.clipboard.writeText(text).then(function() {
+    navigator.clipboard.writeText(document.getElementById('waPreview').textContent).then(function() {
         var ok = document.getElementById('copyOk');
         ok.classList.add('show');
         setTimeout(function() { ok.classList.remove('show'); }, 2000);
     });
 }
-
-init();
+render();
 </script>
 </body>
 </html>
