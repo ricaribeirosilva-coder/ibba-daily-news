@@ -1,323 +1,466 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IBBA Financial Daily News</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #08090C; color: #E0E0E0; line-height: 1.6; }
-        .header { background: #111318; border-bottom: 1px solid #1E2129; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; position: relative; }
-        .header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #EC7000, #FF9933, #EC7000); }
-        .header-left { display: flex; align-items: center; gap: 12px; }
-        .logo { width: 36px; height: 36px; background: linear-gradient(135deg, #EC7000, #C45A00); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 700; color: #FFF; letter-spacing: 0.3px; flex-shrink: 0; }
-        .header-title h1 { font-size: 1.1rem; font-weight: 700; color: #FFF; line-height: 1.2; }
-        .header-title p { font-size: 0.72rem; color: #555; margin-top: 2px; letter-spacing: 0.2px; }
-        .badges { display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center; }
-        .badge { background: #181B22; padding: 0.28rem 0.65rem; border-radius: 6px; font-size: 0.75rem; color: #666; border: 1px solid #22262F; }
-        .badge strong { color: #BBB; font-weight: 600; }
-        .date-nav { display: flex; align-items: center; gap: 0.35rem; }
-        .date-nav button { background: #181B22; border: 1px solid #22262F; color: #888; cursor: pointer; font-size: 0.85rem; padding: 0.25rem 0.55rem; border-radius: 6px; font-family: inherit; transition: all 0.15s; line-height: 1; }
-        .date-nav button:hover { border-color: #EC7000; color: #EC7000; }
-        .date-nav input[type="date"] { background: #181B22; border: 1px solid #22262F; color: #BBB; font-size: 0.75rem; padding: 0.28rem 0.5rem; border-radius: 6px; font-family: inherit; cursor: pointer; }
-        .date-nav input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5); cursor: pointer; }
-        .tabs-container { background: #111318; border-bottom: 1px solid #1E2129; padding: 0 2rem; display: flex; gap: 2rem; }
-        .tab-btn { padding: 0.85rem 0; background: none; border: none; color: #555; cursor: pointer; font-size: 0.875rem; font-weight: 600; border-bottom: 2px solid transparent; font-family: inherit; transition: color 0.15s; }
-        .tab-btn.active { color: #EC7000; border-bottom-color: #EC7000; }
-        .tab-btn:hover:not(.active) { color: #999; }
-        .tab-content { display: none; padding: 1.75rem 2rem; max-width: 960px; margin: 0 auto; }
-        .tab-content.active { display: block; }
-        .section-title { font-size: 0.75rem; font-weight: 700; color: #888; margin-bottom: 0.875rem; padding-bottom: 0.5rem; border-bottom: 1px solid #1A1D24; display: flex; align-items: center; gap: 0.5rem; text-transform: uppercase; letter-spacing: 0.8px; }
-        .section-title::before { content: ''; display: inline-block; width: 3px; height: 12px; background: #EC7000; border-radius: 2px; flex-shrink: 0; }
-        .count { font-size: 0.68rem; background: #1A1D24; color: #666; padding: 0.1rem 0.45rem; border-radius: 10px; font-weight: 600; letter-spacing: 0; text-transform: none; }
-        .news-section { margin-bottom: 2rem; }
-        .card { background: #111318; border: 1px solid #1A1D24; border-radius: 8px; padding: 0.95rem 1.1rem; margin-bottom: 0.55rem; transition: border-color 0.15s; }
-        .card:hover { border-color: #2A2E38; }
-        .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
-        .card-headline { font-size: 0.9rem; font-weight: 600; flex: 1; line-height: 1.45; }
-        .card-headline a { color: #D8D8D8; text-decoration: none; }
-        .card-headline a:hover { color: #EC7000; }
-        .card-meta { font-size: 0.73rem; color: #4A4F5A; margin-top: 0.3rem; }
-        .card-actions { display: flex; gap: 0.25rem; flex-shrink: 0; }
-        .tickers { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem; }
-        .ticker { background: #0C0D10; padding: 0.12rem 0.48rem; border-radius: 4px; font-size: 0.67rem; color: #EC7000; border: 1px solid #1A1D24; font-weight: 600; }
-        .action-btn { background: none; border: 1px solid #1A1D24; color: #4A4F5A; cursor: pointer; font-size: 0.67rem; padding: 0.18rem 0.45rem; border-radius: 4px; font-family: inherit; white-space: nowrap; transition: all 0.15s; }
-        .action-btn:hover { border-color: #EC7000; color: #EC7000; }
-        .expand-btn { background: none; border: none; color: #3A3F4A; cursor: pointer; padding: 0.2rem 0.3rem; font-size: 0.72rem; transition: color 0.15s, transform 0.2s; display: flex; align-items: center; }
-        .expand-btn:hover { color: #777; }
-        .summary { display: none; background: #0C0D10; padding: 0.7rem 0.85rem; border-radius: 6px; margin-top: 0.6rem; font-size: 0.82rem; color: #888; border-left: 2px solid #EC7000; line-height: 1.75; }
-        .summary.open { display: block; }
-        .tier-b-toggle { background: none; border: none; color: #4A4F5A; cursor: pointer; font-size: 0.72rem; font-weight: 700; padding: 0; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.75rem; font-family: inherit; text-transform: uppercase; letter-spacing: 0.8px; transition: color 0.15s; }
-        .tier-b-toggle:hover { color: #888; }
-        .tier-b-content { display: none; }
-        .tier-b-content.open { display: block; }
-        .region-badge { display: inline-block; background: #0C0D10; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.62rem; color: #4A4F5A; border: 1px solid #1A1D24; margin-left: 0.4rem; text-transform: uppercase; letter-spacing: 0.3px; }
-        .empty-state { color: #333; font-size: 0.8rem; padding: 1.5rem 0; text-align: center; }
-        .wa-container { max-width: 540px; margin: 0 auto; }
-        .wa-preview { background: #0C0D10; border: 1px solid #1A1D24; border-radius: 8px; padding: 1.25rem; font-size: 0.82rem; line-height: 2; color: #BBB; font-family: 'Courier New', monospace; white-space: pre-wrap; word-wrap: break-word; margin-bottom: 1rem; max-height: 70vh; overflow-y: auto; }
-        .copy-btn { width: 100%; padding: 0.85rem; background: #EC7000; border: none; border-radius: 8px; color: #FFF; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.15s; }
-        .copy-btn:hover { background: #C45A00; }
-        .copy-ok { display: none; text-align: center; color: #4ADE80; font-size: 0.78rem; margin-top: 0.5rem; font-weight: 500; }
-        .copy-ok.show { display: block; }
-        .toast { position: fixed; bottom: 1.75rem; left: 50%; transform: translateX(-50%); background: #1A1D24; color: #CCC; border: 1px solid #2A2E38; padding: 0.5rem 1.1rem; border-radius: 8px; font-size: 0.78rem; font-weight: 500; opacity: 0; transition: opacity 0.25s; pointer-events: none; z-index: 100; white-space: nowrap; }
-        .toast.show { opacity: 1; }
-        .loading { text-align: center; padding: 3rem 0; color: #555; font-size: 0.85rem; }
-        .loading .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #1A1D24; border-top-color: #EC7000; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 0.5rem; vertical-align: middle; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @media (max-width: 768px) {
-            .header, .tab-content { padding-left: 1rem; padding-right: 1rem; }
-            .tabs-container { padding: 0 1rem; gap: 1.5rem; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBBA Financial Daily Journal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #071019;
+      --bg-deep: #04090f;
+      --surface: rgba(11, 18, 27, 0.88);
+      --surface-strong: rgba(14, 22, 33, 0.96);
+      --surface-soft: rgba(17, 26, 39, 0.96);
+      --card: rgba(16, 24, 36, 0.98);
+      --card-hover: rgba(20, 30, 44, 0.98);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.12);
+      --text: #eef5fb;
+      --text-soft: #c8d3df;
+      --text-muted: #94a3b4;
+      --text-faint: #68778a;
+      --brand: #ec7000;
+      --brand-strong: #ff9c47;
+      --brand-soft: rgba(236, 112, 0, 0.12);
+      --success: #4ade80;
+      --shadow-lg: 0 28px 70px rgba(0, 0, 0, 0.28);
+      --shadow-md: 0 18px 40px rgba(0, 0, 0, 0.2);
+      --shadow-sm: 0 10px 24px rgba(0, 0, 0, 0.16);
+      --radius-2xl: 28px;
+      --radius-xl: 22px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --max-width: 1360px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { color-scheme: dark; scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      font-family: "Manrope", sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background:
+        radial-gradient(circle at top left, rgba(236, 112, 0, 0.16), transparent 24%),
+        radial-gradient(circle at top right, rgba(255, 156, 71, 0.08), transparent 18%),
+        linear-gradient(180deg, #08111a 0%, var(--bg) 48%, var(--bg-deep) 100%);
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 88%);
+      opacity: 0.22;
+    }
+    body::after {
+      content: "";
+      position: fixed; inset: auto -10% -20% auto;
+      width: 540px; height: 540px; border-radius: 999px;
+      background: radial-gradient(circle, rgba(236, 112, 0, 0.12), transparent 64%);
+      filter: blur(20px); pointer-events: none;
+    }
+    a, button, input { font: inherit; -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+    button { border: none; background: none; cursor: pointer; }
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 2px solid rgba(255, 156, 71, 0.82); outline-offset: 2px;
+    }
+    .page-shell { max-width: var(--max-width); margin: 0 auto; padding: 28px 20px 42px; position: relative; z-index: 1; }
+    .hero {
+      position: relative; overflow: hidden;
+      border: 1px solid var(--border); border-radius: var(--radius-2xl);
+      background: linear-gradient(135deg, rgba(236, 112, 0, 0.08), transparent 24%), linear-gradient(180deg, rgba(18, 27, 41, 0.96), rgba(9, 15, 24, 0.98));
+      box-shadow: var(--shadow-lg); backdrop-filter: blur(16px); padding: 24px;
+    }
+    .hero::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(circle at 12% 14%, rgba(255, 156, 71, 0.16), transparent 20%), radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.04), transparent 18%);
+      pointer-events: none;
+    }
+    .hero-top { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.72fr); gap: 22px; align-items: start; }
+    .brand-block { display: flex; gap: 14px; min-width: 0; align-items: center; }
+    .brand-mark {
+      width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--brand-strong), #cb5d00);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.24), 0 12px 28px rgba(236, 112, 0, 0.2);
+      color: #fff; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em;
+    }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.73rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.16em; }
+    .eyebrow::before { content: ""; width: 9px; height: 9px; border-radius: 999px; background: linear-gradient(135deg, var(--brand), var(--brand-strong)); box-shadow: 0 0 18px rgba(236, 112, 0, 0.42); }
+    .hero-title { margin-top: 4px; font-size: clamp(1.5rem, 3vw, 2.2rem); line-height: 1; font-weight: 800; letter-spacing: -0.04em; max-width: 760px; }
+    .brand-copy { display: flex; flex-direction: column; justify-content: center; }
+    .control-card { position: relative; z-index: 1; padding: 18px; border: 1px solid var(--border); border-radius: var(--radius-xl); background: rgba(255, 255, 255, 0.035); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03); }
+    .control-label { color: var(--text-faint); font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; }
+    .control-date { margin-top: 8px; color: var(--text); font-size: 1.08rem; line-height: 1.25; font-weight: 800; letter-spacing: -0.02em; }
+    .date-nav { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 8px; margin-top: 16px; }
+    .date-btn, .date-input { height: 44px; border: 1px solid var(--border); border-radius: 14px; background: rgba(255, 255, 255, 0.03); color: var(--text-soft); transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease, transform 0.18s ease; }
+    .date-btn:hover, .date-input:hover { border-color: rgba(255, 156, 71, 0.22); background: rgba(236, 112, 0, 0.08); color: #fff; }
+    .date-btn { font-size: 1rem; font-weight: 800; }
+    .date-btn:active { transform: translateY(1px); }
+    .date-input { width: 100%; padding: 0 12px; font-size: 0.86rem; }
+    .date-input::-webkit-calendar-picker-indicator { filter: invert(0.72); cursor: pointer; }
+    .control-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+    .control-foot span { color: var(--text-faint); font-size: 0.75rem; font-family: "IBM Plex Mono", monospace; }
+    .status-dot { display: inline-flex; align-items: center; gap: 8px; color: var(--text-soft); font-size: 0.75rem; font-weight: 700; }
+    .status-dot::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--success); box-shadow: 0 0 12px rgba(74, 222, 128, 0.45); }
+    .metrics-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
+    .metric-card { padding: 15px 16px; border: 1px solid var(--border); border-radius: 18px; background: rgba(255, 255, 255, 0.03); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025); transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease; }
+    .metric-card:hover { transform: translateY(-1px); border-color: rgba(255, 156, 71, 0.16); background: rgba(255, 255, 255, 0.038); }
+    .metric-label { color: var(--text-faint); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; }
+    .metric-value { margin-top: 10px; font-size: 1.42rem; line-height: 1; font-weight: 800; letter-spacing: -0.05em; color: var(--text); }
+    .metric-foot { margin-top: 8px; color: var(--text-muted); font-size: 0.8rem; }
+    .state-panel { margin-top: 22px; padding: 24px; border: 1px solid var(--border); border-radius: var(--radius-xl); background: linear-gradient(180deg, rgba(14, 22, 34, 0.96), rgba(9, 15, 24, 0.98)); box-shadow: var(--shadow-md); }
+    .state-panel.loading, .state-panel.empty { min-height: 180px; display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--text-muted); text-align: center; font-size: 0.96rem; }
+    .spinner { width: 22px; height: 22px; border-radius: 999px; border: 2px solid rgba(255,255,255,0.08); border-top-color: var(--brand); animation: spin 0.8s linear infinite; flex-shrink: 0; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .journal { display: none; margin-top: 22px; gap: 22px; }
+    .lead-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.95fr); gap: 18px; }
+    .lead-card {
+      position: relative; overflow: hidden; min-height: 250px; padding: 24px;
+      border: 1px solid var(--border); border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(18, 27, 40, 0.98), rgba(10, 16, 25, 0.98));
+      box-shadow: var(--shadow-md); display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .lead-card:first-child { min-height: 518px; grid-row: span 2; background: linear-gradient(180deg, rgba(24, 35, 50, 0.98), rgba(12, 19, 29, 0.98)); }
+    .lead-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: linear-gradient(180deg, var(--brand-strong), rgba(236, 112, 0, 0.14)); }
+    .lead-card::after { content: ""; position: absolute; inset: auto -60px -120px auto; width: 240px; height: 240px; border-radius: 999px; background: radial-gradient(circle, rgba(236, 112, 0, 0.1), transparent 68%); pointer-events: none; }
+    .lead-tag { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; color: var(--text-soft); font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; }
+    .lead-tag::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--brand-strong); box-shadow: 0 0 14px rgba(236, 112, 0, 0.36); }
+    .lead-body { position: relative; z-index: 1; margin-top: 18px; }
+    .lead-title { font-size: 1.16rem; line-height: 1.28; font-weight: 800; letter-spacing: -0.03em; max-width: 94%; }
+    .lead-card:first-child .lead-title { font-size: clamp(1.5rem, 2.4vw, 2.2rem); line-height: 1.1; max-width: 88%; }
+    .lead-summary { margin-top: 14px; color: var(--text-muted); font-size: 0.92rem; line-height: 1.8; max-width: 90%; }
+    .lead-card:first-child .lead-summary { font-size: 0.98rem; max-width: 82%; }
+    .lead-foot { position: relative; z-index: 1; margin-top: 22px; display: flex; justify-content: space-between; align-items: flex-end; gap: 14px; }
+    .lead-meta { color: var(--text-faint); font-size: 0.79rem; font-weight: 600; }
+    .lead-cta {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 12px;
+      border: 1px solid rgba(236, 112, 0, 0.18); background: rgba(236, 112, 0, 0.08); color: #ffba79; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.02em;
+      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease; white-space: nowrap;
+    }
+    .lead-cta:hover { background: rgba(236, 112, 0, 0.14); border-color: rgba(255, 156, 71, 0.24); color: #ffd1a2; transform: translateY(-1px); }
+    .desk-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; margin-top: 22px; }
+    .panel { border: 1px solid var(--border); border-radius: var(--radius-xl); background: linear-gradient(180deg, rgba(14, 22, 34, 0.96), rgba(9, 15, 24, 0.98)); box-shadow: var(--shadow-md); overflow: hidden; }
+    .panel-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 22px 22px 0; }
+    .panel-kicker { color: var(--text-faint); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.16em; }
+    .panel-title { margin-top: 6px; font-size: 1.22rem; line-height: 1.08; font-weight: 800; letter-spacing: -0.04em; color: var(--text); }
+    .panel-subtitle { margin-top: 8px; color: var(--text-muted); font-size: 0.9rem; }
+    .count-pill { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid rgba(236, 112, 0, 0.18); background: rgba(236, 112, 0, 0.1); color: var(--brand-strong); font-size: 0.82rem; font-weight: 800; }
+    .stories { display: grid; gap: 14px; padding: 18px 22px 22px; }
+    .story-card {
+      position: relative; padding: 18px; border: 1px solid var(--border); border-radius: 18px;
+      background: linear-gradient(180deg, var(--card), rgba(10, 16, 25, 0.98));
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    }
+    .story-card:hover { transform: translateY(-2px); border-color: rgba(255, 156, 71, 0.18); background: linear-gradient(180deg, var(--card-hover), rgba(10, 16, 25, 0.98)); box-shadow: var(--shadow-sm); }
+    .story-topline { display: flex; align-items: center; gap: 10px; color: var(--text-faint); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; }
+    .story-topline::before { content: ""; width: 7px; height: 7px; border-radius: 999px; background: rgba(255, 156, 71, 0.88); box-shadow: 0 0 10px rgba(236, 112, 0, 0.32); }
+    .story-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-top: 12px; }
+    .story-main { min-width: 0; flex: 1; }
+    .story-title { font-size: 1rem; line-height: 1.45; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
+    .story-title a:hover { color: #fff; }
+    .story-meta { margin-top: 8px; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; }
+    .story-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+    .story-link {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 38px; padding: 0 14px;
+      border: 1px solid var(--border); border-radius: 12px; background: rgba(255, 255, 255, 0.03); color: var(--text-soft);
+      font-size: 0.78rem; font-weight: 800; letter-spacing: 0.03em;
+      transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease, transform 0.18s ease; white-space: nowrap;
+    }
+    .story-link:hover { border-color: rgba(255, 156, 71, 0.22); background: rgba(236, 112, 0, 0.08); color: #fff; transform: translateY(-1px); }
+    .tickers { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .ticker { display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; border-radius: 999px; border: 1px solid rgba(236, 112, 0, 0.16); background: rgba(236, 112, 0, 0.08); color: #ffb36b; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.02em; }
+    .summary {
+      margin-top: 14px; padding: 14px 16px; border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(255, 255, 255, 0.03);
+      color: var(--text-soft); font-size: 0.86rem; line-height: 1.82;
+    }
+    .empty-card { padding: 20px; border: 1px dashed var(--border-strong); border-radius: 16px; background: rgba(255, 255, 255, 0.02); color: var(--text-muted); text-align: center; font-size: 0.88rem; }
+    .toast {
+      position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+      padding: 12px 16px; border-radius: 14px; border: 1px solid rgba(255, 156, 71, 0.18);
+      background: rgba(13, 20, 30, 0.96); color: var(--text); font-size: 0.82rem; font-weight: 700;
+      box-shadow: var(--shadow-md); opacity: 0; pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease; z-index: 100; max-width: calc(100vw - 28px); text-align: center;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+    @media (max-width: 1140px) {
+      .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .desk-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 980px) {
+      .hero-top { grid-template-columns: 1fr; }
+      .lead-grid { grid-template-columns: 1fr; }
+      .lead-card:first-child { min-height: 380px; grid-row: auto; }
+    }
+    @media (max-width: 720px) {
+      .page-shell { padding: 16px 12px 28px; }
+      .hero, .panel, .state-panel, .lead-card { border-radius: 22px; }
+      .hero { padding: 18px; }
+      .brand-block { flex-direction: column; }
+      .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .panel-head, .stories { padding-left: 18px; padding-right: 18px; }
+      .story-head { flex-direction: column; }
+      .story-actions { width: 100%; justify-content: flex-start; }
+    }
+    @media (max-width: 520px) {
+      .metrics-grid { grid-template-columns: 1fr; }
+      .date-nav { grid-template-columns: 40px minmax(0, 1fr) 40px; }
+      .brand-mark { width: 42px; height: 42px; border-radius: 12px; }
+      .hero-title { font-size: 1.5rem; }
+      .lead-card:first-child .lead-summary, .lead-summary { max-width: 100%; }
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-left">
-            <div class="logo">IBBA</div>
-            <div class="header-title">
-                <h1>Financial Daily News</h1>
-                <p>Equity Research &mdash; Financials</p>
-            </div>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-top">
+        <div class="brand-block">
+          <div class="brand-mark">IBBA</div>
+          <div class="brand-copy">
+            <div class="eyebrow">Equity Research &middot; Financials</div>
+            <h1 class="hero-title">Financial Daily Journal</h1>
+          </div>
         </div>
-        <div class="badges">
-            <div class="date-nav">
-                <button onclick="changeDate(-1)" title="Dia anterior">&#9664;</button>
-                <input type="date" id="datePicker" onchange="loadDate(this.value)">
-                <button onclick="changeDate(1)" title="Pr&oacute;ximo dia">&#9654;</button>
-            </div>
-            <div class="badge" id="brBadge"></div>
-            <div class="badge" id="glBadge"></div>
-            <div class="badge" id="tbBadge"></div>
+        <aside class="control-card">
+          <div class="control-label">Edition Date</div>
+          <div class="control-date" id="editionDateLabel">Carregando data...</div>
+          <div class="date-nav">
+            <button type="button" class="date-btn" onclick="changeDate(-1)" title="Dia anterior">&#9664;</button>
+            <input type="date" class="date-input" id="datePicker" onchange="loadDate(this.value)">
+            <button type="button" class="date-btn" onclick="changeDate(1)" title="Pr&oacute;ximo dia">&#9654;</button>
+          </div>
+          <div class="control-foot">
+            <span id="editionCode">EDITION --</span>
+            <div class="status-dot">Database online</div>
+          </div>
+        </aside>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Total</div>
+          <div class="metric-value" id="totalBadge">0</div>
+          <div class="metric-foot">Not&iacute;cias da edi&ccedil;&atilde;o</div>
         </div>
-    </div>
-    <div class="tabs-container">
-        <button class="tab-btn active" onclick="switchTab('curadoria',this)">Curadoria</button>
-        <button class="tab-btn" onclick="switchTab('whatsapp',this)">WhatsApp</button>
-    </div>
-    <div id="curadoria" class="tab-content active">
-        <div id="loadingState" class="loading"><span class="spinner"></span>Carregando...</div>
-        <div id="newsContent" style="display:none;">
-            <div class="news-section">
-                <h2 class="section-title">Brasil <span class="count" id="brCount"></span></h2>
-                <div id="brCards"></div>
-            </div>
-            <div class="news-section">
-                <h2 class="section-title">Global <span class="count" id="glCount"></span></h2>
-                <div id="glCards"></div>
-            </div>
-            <div class="news-section">
-                <button class="tier-b-toggle" onclick="toggleTierB()">
-                    <span id="tbIcon">&#9654;</span> Tier B <span class="count" id="tbCount"></span>
-                </button>
-                <div id="tbContent" class="tier-b-content"><div id="tbCards"></div></div>
-            </div>
+        <div class="metric-card">
+          <div class="metric-label">Brasil</div>
+          <div class="metric-value" id="brBadge">0</div>
+          <div class="metric-foot">Cobertura dom&eacute;stica</div>
         </div>
-        <div id="emptyState" class="empty-state" style="display:none;">Nenhuma not&iacute;cia para esta data.</div>
-    </div>
-    <div id="whatsapp" class="tab-content">
-        <div class="wa-container">
-            <div class="wa-preview" id="waPreview"></div>
-            <button class="copy-btn" onclick="copyWA()">Copiar para WhatsApp</button>
-            <div class="copy-ok" id="copyOk">&#10003; Copiado!</div>
+        <div class="metric-card">
+          <div class="metric-label">Global</div>
+          <div class="metric-value" id="glBadge">0</div>
+          <div class="metric-foot">Fluxo internacional</div>
         </div>
+        <div class="metric-card">
+          <div class="metric-label">Edi&ccedil;&atilde;o</div>
+          <div class="metric-value" id="editionShortBadge">--</div>
+          <div class="metric-foot">Data de refer&ecirc;ncia</div>
+        </div>
+      </div>
+    </header>
+
+    <div id="loadingState" class="state-panel loading">
+      <span class="spinner"></span>
+      <span>Carregando edi&ccedil;&atilde;o...</span>
     </div>
-    <div class="toast" id="toast"></div>
+    <div id="emptyState" class="state-panel empty" style="display:none;">
+      Nenhuma not&iacute;cia dispon&iacute;vel para esta data.
+    </div>
+
+    <main id="journalContent" class="journal">
+      <section class="lead-grid" id="leadGrid"></section>
+      <div class="desk-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-kicker">Brazil Desk</div>
+              <h2 class="panel-title">Brasil</h2>
+              <p class="panel-subtitle">O que mais importa no notici&aacute;rio local da edi&ccedil;&atilde;o.</p>
+            </div>
+            <span class="count-pill" id="brCount">0</span>
+          </div>
+          <div class="stories" id="brCards"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-kicker">Global Desk</div>
+              <h2 class="panel-title">Global</h2>
+              <p class="panel-subtitle">Leituras internacionais com impacto para o setor.</p>
+            </div>
+            <span class="count-pill" id="glCount">0</span>
+          </div>
+          <div class="stories" id="glCards"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+
 <script>
-// ── Supabase config ──
 var SUPABASE_URL = 'https://nrnxhmkoioalklxqrrpt.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ybnhobWtvaW9hbGtseHFycnB0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1NzMwOTQsImV4cCI6MjA5MTE0OTA5NH0.kdPEfa3i0lu2JiyfkYbTcvth47KtnnRMDUpS3rU9eBs';
 
-// ── State ──
-var data = { classA_brazil: [], classA_global: [], classB: [] };
+var brItems = [];
+var glItems = [];
 var currentDate = '';
 
-// ── Supabase REST fetch ──
 async function supaFetch(table, query) {
-    var url = SUPABASE_URL + '/rest/v1/' + table + '?' + query;
-    var resp = await fetch(url, {
-        headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': 'Bearer ' + SUPABASE_KEY,
-            'Accept': 'application/json'
-        }
-    });
-    if (!resp.ok) throw new Error('Supabase error: ' + resp.status);
-    return resp.json();
+  var url = SUPABASE_URL + '/rest/v1/' + table + '?' + query;
+  var resp = await fetch(url, {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Accept': 'application/json' }
+  });
+  if (!resp.ok) throw new Error('Supabase error: ' + resp.status);
+  return resp.json();
 }
 
-// ── Load data for a given date ──
-async function loadDate(dateStr) {
-    if (!dateStr) return;
-    currentDate = dateStr;
-    document.getElementById('datePicker').value = dateStr;
-    document.getElementById('loadingState').style.display = 'block';
-    document.getElementById('newsContent').style.display = 'none';
-    document.getElementById('emptyState').style.display = 'none';
-
-    try {
-        var rows = await supaFetch('news_items', 'edition_date=eq.' + dateStr + '&order=id.asc');
-
-        data.classA_brazil = rows.filter(function(r) { return r.region === 'brazil' && r.tier === 'A'; });
-        data.classA_global = rows.filter(function(r) { return r.region === 'global' && r.tier === 'A'; });
-        data.classB = rows.filter(function(r) { return r.tier === 'B'; });
-
-        document.getElementById('loadingState').style.display = 'none';
-        if (rows.length === 0) {
-            document.getElementById('emptyState').style.display = 'block';
-        } else {
-            document.getElementById('newsContent').style.display = 'block';
-            render();
-        }
-    } catch (err) {
-        document.getElementById('loadingState').style.display = 'none';
-        document.getElementById('emptyState').style.display = 'block';
-        document.getElementById('emptyState').textContent = 'Erro ao carregar: ' + err.message;
-        console.error(err);
-    }
-}
-
-// ── Date navigation ──
-function changeDate(delta) {
-    var d = new Date(currentDate + 'T12:00:00');
-    d.setDate(d.getDate() + delta);
-    var iso = d.toISOString().split('T')[0];
-    loadDate(iso);
-}
-
-// ── Find latest available date on first load ──
-async function init() {
-    try {
-        var latest = await supaFetch('news_items', 'select=edition_date&order=edition_date.desc&limit=1');
-        if (latest.length > 0) {
-            loadDate(latest[0].edition_date);
-        } else {
-            var today = new Date().toISOString().split('T')[0];
-            document.getElementById('datePicker').value = today;
-            currentDate = today;
-            document.getElementById('loadingState').style.display = 'none';
-            document.getElementById('emptyState').style.display = 'block';
-        }
-    } catch (err) {
-        var today = new Date().toISOString().split('T')[0];
-        document.getElementById('datePicker').value = today;
-        currentDate = today;
-        document.getElementById('loadingState').style.display = 'none';
-        document.getElementById('emptyState').textContent = 'Erro de conex\u00e3o com o banco de dados.';
-        document.getElementById('emptyState').style.display = 'block';
-    }
-}
-
-function toast(msg) {
-    var el = document.getElementById('toast');
-    el.textContent = msg;
-    el.classList.add('show');
-    setTimeout(function() { el.classList.remove('show'); }, 1800);
-}
-function render() {
-    var d = data;
-    document.getElementById('brBadge').innerHTML = '<strong>' + d.classA_brazil.length + '</strong> Brasil';
-    document.getElementById('glBadge').innerHTML = '<strong>' + d.classA_global.length + '</strong> Global';
-    document.getElementById('tbBadge').innerHTML = '<strong>' + d.classB.length + '</strong> Tier B';
-    document.getElementById('brCount').textContent = d.classA_brazil.length;
-    document.getElementById('glCount').textContent = d.classA_global.length;
-    document.getElementById('tbCount').textContent = d.classB.length;
-    document.getElementById('brCards').innerHTML = d.classA_brazil.length
-        ? d.classA_brazil.map(function(item, i) { return cardA(item, 'br', i); }).join('')
-        : '<p class="empty-state">Nenhuma not\u00edcia Brasil hoje.</p>';
-    document.getElementById('glCards').innerHTML = d.classA_global.length
-        ? d.classA_global.map(function(item, i) { return cardA(item, 'gl', i); }).join('')
-        : '<p class="empty-state">Nenhuma not\u00edcia Global hoje.</p>';
-    document.getElementById('tbCards').innerHTML = d.classB.length
-        ? d.classB.map(function(item, i) { return cardTB(item, i); }).join('')
-        : '<p class="empty-state">Nenhuma not\u00edcia Tier B hoje.</p>';
-    updateWA();
-}
-function cardA(item, list, idx) {
-    var id = list + '-' + idx;
-    var tks = item.tickers && item.tickers.length ? '<div class="tickers">' + item.tickers.map(function(t) { return '<span class="ticker">' + esc(t) + '</span>'; }).join('') + '</div>' : '';
-    return '<div class="card">' +
-        '<div class="card-top">' +
-            '<h3 class="card-headline"><a href="' + esc(item.url) + '" target="_blank" rel="noopener">' + esc(item.headline) + '</a></h3>' +
-            '<div class="card-actions">' +
-                '<button class="action-btn" onclick="demote(\'' + list + '\',' + idx + ')">Tier B</button>' +
-                '<button class="expand-btn" onclick="toggleSummary(\'' + id + '\',this)">&#9660;</button>' +
-            '</div>' +
-        '</div>' +
-        '<div class="card-meta">' + esc(item.source) + ' &bull; ' + esc(item.pub_date || '') + '</div>' +
-        tks +
-        '<div class="summary" id="' + id + '">' + esc(item.summary || '') + '</div>' +
-    '</div>';
-}
-function cardTB(item, idx) {
-    var id = 'tb-' + idx;
-    var reg = item.region ? '<span class="region-badge">' + esc(item.region) + '</span>' : '';
-    var tks = item.tickers && item.tickers.length ? '<div class="tickers">' + item.tickers.map(function(t) { return '<span class="ticker">' + esc(t) + '</span>'; }).join('') + '</div>' : '';
-    var lbl = item.region === 'global' ? '&#8593; Global' : '&#8593; Brasil';
-    return '<div class="card">' +
-        '<div class="card-top">' +
-            '<h3 class="card-headline"><a href="' + esc(item.url) + '" target="_blank" rel="noopener">' + esc(item.headline) + '</a>' + reg + '</h3>' +
-            '<div class="card-actions">' +
-                '<button class="action-btn" onclick="promote(' + idx + ')">' + lbl + '</button>' +
-                '<button class="expand-btn" onclick="toggleSummary(\'' + id + '\',this)">&#9660;</button>' +
-            '</div>' +
-        '</div>' +
-        '<div class="card-meta">' + esc(item.source) + ' &bull; ' + esc(item.pub_date || '') + '</div>' +
-        tks +
-        '<div class="summary" id="' + id + '">' + esc(item.summary || '') + '</div>' +
-    '</div>';
-}
-function demote(list, idx) {
-    var src = list === 'br' ? data.classA_brazil : data.classA_global;
-    var item = src.splice(idx, 1)[0];
-    item.region = list === 'br' ? 'brazil' : 'global';
-    item.tier = 'B';
-    data.classB.push(item);
-    toast('"' + item.headline.substring(0, 45) + '..." \u2192 Tier B');
-    render();
-}
-function promote(idx) {
-    var item = data.classB.splice(idx, 1)[0];
-    item.tier = 'A';
-    if (item.region === 'global') { data.classA_global.push(item); toast('"' + item.headline.substring(0, 45) + '..." \u2192 Global'); }
-    else { data.classA_brazil.push(item); toast('"' + item.headline.substring(0, 45) + '..." \u2192 Brasil'); }
-    render();
-}
-function updateWA() {
-    var wa = '*IBBA Financial Daily News*\n\n\n> Brazil\n\n';
-    data.classA_brazil.forEach(function(item) { wa += '- *' + item.headline + '*\n' + item.url + '\n\n'; });
-    wa += '\n> Global\n\n';
-    data.classA_global.forEach(function(item) { wa += '- *' + item.headline + '*\n' + item.url + '\n\n'; });
-    document.getElementById('waPreview').textContent = wa.trim();
-}
 function esc(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
-function toggleSummary(id, btn) {
-    var el = document.getElementById(id);
-    el.classList.toggle('open');
-    btn.style.transform = el.classList.contains('open') ? 'rotate(180deg)' : '';
-}
-function toggleTierB() {
-    var c = document.getElementById('tbContent');
-    c.classList.toggle('open');
-    document.getElementById('tbIcon').innerHTML = c.classList.contains('open') ? '&#9660;' : '&#9654;';
-}
-function switchTab(name, btn) {
-    document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
-    document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
-    document.getElementById(name).classList.add('active');
-    btn.classList.add('active');
-}
-function copyWA() {
-    navigator.clipboard.writeText(document.getElementById('waPreview').textContent).then(function() {
-        var ok = document.getElementById('copyOk');
-        ok.classList.add('show');
-        setTimeout(function() { ok.classList.remove('show'); }, 2000);
-    });
+
+function normalizeTickers(value) {
+  if (Array.isArray(value)) return value.filter(Boolean);
+  if (typeof value === 'string' && value.trim()) {
+    var raw = value.trim();
+    if (raw[0] === '[') { try { var p = JSON.parse(raw); return Array.isArray(p) ? p.filter(Boolean) : []; } catch(e){} }
+    return raw.split(/[;,|]/).map(function(i){ return i.trim(); }).filter(Boolean);
+  }
+  return [];
 }
 
-// ── Start ──
+function formatDateLabel(dateStr) {
+  if (!dateStr) return 'Sem data';
+  var date = /^\d{4}-\d{2}-\d{2}$/.test(dateStr) ? new Date(dateStr + 'T12:00:00') : new Date(dateStr);
+  if (isNaN(date.getTime())) return dateStr;
+  var wd = ['domingo','segunda-feira','ter\u00e7a-feira','quarta-feira','quinta-feira','sexta-feira','s\u00e1bado'];
+  var mo = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  return wd[date.getDay()] + ', ' + date.getDate() + ' ' + mo[date.getMonth()] + ' ' + date.getFullYear();
+}
+
+function formatShortDate(dateStr) {
+  if (!dateStr) return '--';
+  var date = /^\d{4}-\d{2}-\d{2}$/.test(dateStr) ? new Date(dateStr + 'T12:00:00') : new Date(dateStr);
+  if (isNaN(date.getTime())) return dateStr;
+  return String(date.getDate()).padStart(2,'0') + '/' + String(date.getMonth()+1).padStart(2,'0');
+}
+
+function excerpt(text, max) { return !text ? '' : text.length > max ? text.slice(0, max).trim() + '...' : text; }
+
+function emptyCard(msg) { return '<div class="empty-card">' + esc(msg) + '</div>'; }
+
+function buildTickers(item) {
+  var tickers = normalizeTickers(item.tickers);
+  if (!tickers.length) return '';
+  return '<div class="tickers">' + tickers.map(function(t){ return '<span class="ticker">' + esc(t) + '</span>'; }).join('') + '</div>';
+}
+
+function leadCard(entry, index) {
+  if (!entry || !entry.item) {
+    return '<article class="lead-card"><div><div class="lead-tag">Sem destaque</div><div class="lead-body"><h3 class="lead-title">Nenhum item dispon\u00edvel nesta posi\u00e7\u00e3o</h3><div class="lead-summary">Quando houver mais not\u00edcias na edi\u00e7\u00e3o, os destaques aparecer\u00e3o aqui.</div></div></div><div class="lead-foot"><div class="lead-meta">Aguardando conte\u00fado</div></div></article>';
+  }
+  var item = entry.item;
+  return '<article class="lead-card"><div><div class="lead-tag">' + esc(entry.label) + '</div><div class="lead-body"><h3 class="lead-title"><a href="' + esc(item.url||'#') + '" target="_blank" rel="noopener">' + esc(item.headline) + '</a></h3><div class="lead-summary">' + esc(excerpt(item.summary||'', index===0?320:180)) + '</div></div></div><div class="lead-foot"><div class="lead-meta">' + esc(item.source||'') + ' &bull; ' + esc(formatDateLabel(item.pub_date||currentDate)) + '</div><a class="lead-cta" href="' + esc(item.url||'#') + '" target="_blank" rel="noopener">Abrir mat\u00e9ria</a></div></article>';
+}
+
+function storyCard(item, prefix, idx) {
+  var id = prefix + '-' + idx;
+  var sum = item.summary ? '<div class="summary">' + esc(item.summary) + '</div>' : '';
+  return '<article class="story-card"><div class="story-topline">Daily note</div><div class="story-head"><div class="story-main"><h3 class="story-title"><a href="' + esc(item.url||'#') + '" target="_blank" rel="noopener">' + esc(item.headline) + '</a></h3><div class="story-meta">' + esc(item.source||'') + ' &bull; ' + esc(formatDateLabel(item.pub_date||currentDate)) + '</div>' + buildTickers(item) + '</div><div class="story-actions"><a class="story-link" href="' + esc(item.url||'#') + '" target="_blank" rel="noopener">Abrir</a></div></div>' + sum + '</article>';
+}
+
+function renderLeadSection() {
+  var leads = [];
+  if (brItems[0]) leads.push({ label: 'Brasil em foco', item: brItems[0] });
+  if (glItems[0]) leads.push({ label: 'Global em foco', item: glItems[0] });
+  var pool = brItems.slice(1).concat(glItems.slice(1));
+  while (leads.length < 3 && pool.length) leads.push({ label: 'Leitura adicional', item: pool.shift() });
+  while (leads.length < 3) leads.push(null);
+  document.getElementById('leadGrid').innerHTML = leads.map(function(e,i){ return leadCard(e,i); }).join('');
+}
+
+function render() {
+  var total = brItems.length + glItems.length;
+  document.getElementById('editionDateLabel').textContent = formatDateLabel(currentDate);
+  document.getElementById('editionCode').textContent = 'EDITION ' + currentDate;
+  document.getElementById('editionShortBadge').textContent = formatShortDate(currentDate);
+  document.getElementById('totalBadge').textContent = total;
+  document.getElementById('brBadge').textContent = brItems.length;
+  document.getElementById('glBadge').textContent = glItems.length;
+  document.getElementById('brCount').textContent = brItems.length;
+  document.getElementById('glCount').textContent = glItems.length;
+  renderLeadSection();
+  document.getElementById('brCards').innerHTML = brItems.length
+    ? brItems.map(function(item,i){ return storyCard(item,'br',i); }).join('')
+    : emptyCard('Nenhuma not\u00edcia Brasil nesta edi\u00e7\u00e3o.');
+  document.getElementById('glCards').innerHTML = glItems.length
+    ? glItems.map(function(item,i){ return storyCard(item,'gl',i); }).join('')
+    : emptyCard('Nenhuma not\u00edcia Global nesta edi\u00e7\u00e3o.');
+}
+
+async function loadDate(dateStr) {
+  if (!dateStr) return;
+  currentDate = dateStr;
+  document.getElementById('datePicker').value = dateStr;
+  document.getElementById('loadingState').style.display = 'flex';
+  document.getElementById('journalContent').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'none';
+  try {
+    var rows = await supaFetch('news_items', 'edition_date=eq.' + dateStr + '&order=id.asc');
+    brItems = rows.filter(function(r){ return r.region === 'brazil'; });
+    glItems = rows.filter(function(r){ return r.region === 'global'; });
+    render();
+    document.getElementById('loadingState').style.display = 'none';
+    if (!rows.length) {
+      document.getElementById('emptyState').style.display = 'flex';
+    } else {
+      document.getElementById('journalContent').style.display = 'grid';
+    }
+  } catch(err) {
+    brItems = []; glItems = [];
+    render();
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('emptyState').textContent = 'Erro ao carregar: ' + err.message;
+    document.getElementById('emptyState').style.display = 'flex';
+  }
+}
+
+function changeDate(delta) {
+  if (!currentDate) return;
+  var d = new Date(currentDate + 'T12:00:00');
+  d.setDate(d.getDate() + delta);
+  loadDate(d.toISOString().split('T')[0]);
+}
+
+async function init() {
+  try {
+    var latest = await supaFetch('news_items', 'select=edition_date&order=edition_date.desc&limit=1');
+    if (latest.length > 0) { loadDate(latest[0].edition_date); }
+    else {
+      currentDate = new Date().toISOString().split('T')[0];
+      render();
+      document.getElementById('datePicker').value = currentDate;
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('emptyState').style.display = 'flex';
+    }
+  } catch(err) {
+    currentDate = new Date().toISOString().split('T')[0];
+    render();
+    document.getElementById('datePicker').value = currentDate;
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('emptyState').textContent = 'Erro de conex\u00e3o com o banco de dados.';
+    document.getElementById('emptyState').style.display = 'flex';
+  }
+}
+
 init();
 </script>
 </body>
