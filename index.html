@@ -77,10 +77,8 @@
       content: "";
       position: fixed; inset: 0;
       background:
-        radial-gradient(ellipse 80% 55% at 15% 6%, rgba(216, 78, 29, 0.28), transparent 60%),
-        radial-gradient(ellipse 70% 55% at 88% 18%, rgba(216, 78, 29, 0.18), transparent 55%),
-        radial-gradient(ellipse 90% 70% at 50% 100%, rgba(237, 215, 170, 0.55), transparent 70%),
-        linear-gradient(180deg, rgba(242, 234, 214, 0.55) 0%, rgba(242, 234, 214, 0.82) 60%, var(--bg) 100%);
+        radial-gradient(ellipse 90% 70% at 50% 100%, rgba(237, 215, 170, 0.45), transparent 70%),
+        linear-gradient(180deg, rgba(242, 234, 214, 0.70) 0%, rgba(242, 234, 214, 0.88) 60%, var(--bg) 100%);
       z-index: -1;
       pointer-events: none;
     }
@@ -523,14 +521,19 @@
       display: grid;
       grid-template-columns: minmax(200px, 280px) 1fr;
       gap: 28px;
-      padding: 26px 0;
-      border-bottom: 1px solid var(--rule);
-      transition: background 0.2s;
+      padding: 26px 28px;
+      background: #fbf6e8;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      box-shadow: 0 1px 0 rgba(23, 18, 13, 0.04);
+      transition: box-shadow 0.2s, border-color 0.2s;
       scroll-margin-top: 100px;
+      margin-bottom: 14px;
     }
-    .story:first-child { padding-top: 0; }
-    .story:last-child { border-bottom: none; }
-    .story.is-focused { background: var(--bg-card-soft); margin: 0 -20px; padding: 26px 20px; border-radius: 4px; }
+    .story:hover { border-color: var(--rule-strong); box-shadow: 0 2px 0 rgba(23, 18, 13, 0.08); }
+    .story:first-child { margin-top: 0; }
+    .story:last-child { margin-bottom: 0; }
+    .story.is-focused { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
     .story.is-read .story-title, .story.is-read .story-dek { opacity: 0.45; }
     .story.is-read .story-image { opacity: 0.55; filter: saturate(0.4); }
 
@@ -607,13 +610,13 @@
     .story-source { color: var(--paper-dim); font-weight: 500; }
     .story-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-faint); }
     .story-title {
-      font-family: var(--display);
-      font-weight: 400;
-      font-size: clamp(1.2rem, 1.6vw, 1.45rem);
-      line-height: 1.18;
-      letter-spacing: -0.015em;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: clamp(1.22rem, 1.65vw, 1.52rem);
+      line-height: 1.22;
+      letter-spacing: -0.018em;
       color: var(--text);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       transition: color 0.2s;
     }
     .story-title a:hover { color: var(--accent); }
@@ -1306,7 +1309,7 @@
 
     function draw() {
       if (!running) { raf = null; return; }
-      const t = (performance.now() - t0) * 0.00010;
+      const t = (performance.now() - t0) * 0.000035;
       ctx.clearRect(0, 0, w, h);
 
       const scaleStep = isMobile ? 9 : 6;
